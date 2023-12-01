@@ -13,7 +13,7 @@ namespace Levels
         {
             Debug.Log("Added Collectable!");
             
-            var prefabPath = "Assets/Prefabs/Cube.prefab";
+            var prefabPath = "Assets/Prefabs/Collectables/Cube.prefab";
             AddCollectable(prefabPath);
         }
         
@@ -21,7 +21,7 @@ namespace Levels
         {
             Debug.Log("Added Collectable!");
             
-            var prefabPath = "Assets/Prefabs/Sphere.prefab";
+            var prefabPath = "Assets/Prefabs/Collectables/Sphere.prefab";
             AddCollectable(prefabPath);
         }
         
@@ -29,7 +29,7 @@ namespace Levels
         {
             Debug.Log("Added Collectable!");
             
-            var prefabPath = "Assets/Prefabs/Capsule.prefab";
+            var prefabPath = "Assets/Prefabs/Collectables/Capsule.prefab";
             AddCollectable(prefabPath);
         }
 

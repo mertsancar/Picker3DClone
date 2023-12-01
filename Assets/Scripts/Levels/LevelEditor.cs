@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Levels
 {
@@ -15,10 +16,16 @@ namespace Levels
         {
             Debug.Log("Add Stage");
 
-            var prefabPath = "Assets/Prefabs/Stage.prefab";
+            var prefabPath = "Assets/Prefabs/Levels/Stage.prefab";
             var stagePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             var stageObject = Instantiate(stagePrefab, level.stages).GetComponent<Stage>();
+
+            var zPosition = (level.stages.childCount-1) * 24.97f;
+
+            stageObject.transform.position = new Vector3(0, 0, zPosition);
             
+            Selection.objects = new Object[] { stageObject.gameObject };
+
         }
         
         public void GetLevel()
@@ -35,9 +42,10 @@ namespace Levels
             catch (Exception e)
             {
                 Debug.LogError("Error: The specified level " + levelId + " could not be found. The application has defaulted to the default level.");
+
+                ClearLevel();
                 
-                prefabPath = "Assets/Prefabs/Level.prefab";
-                newLevel = PrefabUtility.LoadPrefabContents(prefabPath).GetComponent<Level>();
+                return;
             }
 
             DestroyImmediate(level.gameObject);
@@ -45,6 +53,7 @@ namespace Levels
 
             level = transform.GetChild(0).GetComponent<Level>();
         }
+        
         
         public void SaveLevel()
         {
@@ -54,6 +63,18 @@ namespace Levels
             
             var prefabPath = "Assets/Resources/Levels/Prefabs/level" + levelId + ".prefab";
             PrefabUtility.SaveAsPrefabAsset(level.gameObject, prefabPath);
+        }
+        
+        public void ClearLevel()
+        {
+            Debug.Log("Save Level");
+
+            var prefabPath = "Assets/Prefabs/Levels/Level.prefab";
+            var defaultLevel = PrefabUtility.LoadPrefabContents(prefabPath).GetComponent<Level>();
+            DestroyImmediate(level.gameObject);
+            Instantiate(defaultLevel, transform);
+            
+            level = transform.GetChild(0).GetComponent<Level>();
         }
 
 

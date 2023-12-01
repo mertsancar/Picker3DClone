@@ -1,6 +1,8 @@
-﻿namespace UI
+﻿using UnityEngine;
+
+namespace UI
 {
-    public class StageSuccessScreen : BaseScreen
+    public class StageFailScreen : BaseScreen
     {
         public override void Prepare(object param)
         {
@@ -9,3 +11,4 @@
     }
     
 }
+

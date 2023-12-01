@@ -5,7 +5,7 @@ namespace Levels
 {
     public class Level : MonoBehaviour
     {
-        public int levelId;
+        [HideInInspector] public int levelId;
         public Transform stages;
 
 

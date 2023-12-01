@@ -27,7 +27,7 @@ namespace Levels
         {
             levelEditor = target as LevelEditor;
             
-            GUILayout.Space(60f);
+            GUILayout.Space(30f);
             
             if (GUILayout.Button("Add Stage", GUILayout.Height(30), GUILayout.Width(100)))
             {
@@ -44,6 +44,13 @@ namespace Levels
             if (GUILayout.Button("Save Level", GUILayout.Height(40), GUILayout.Width(100)))
             {
                 levelEditor.SaveLevel();
+            }
+            
+            GUILayout.Space(60f);
+            
+            if (GUILayout.Button("Clear Level", GUILayout.Height(40), GUILayout.Width(100)))
+            {
+                levelEditor.ClearLevel();
             }
         }
         
