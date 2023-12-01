@@ -39,7 +39,23 @@ namespace Levels
             {
                 stageEditor.AddSphereCollectable();
             }
-
+            
+            if (GUILayout.Button("Add Capsule Collectable", GUILayout.Height(30), GUILayout.Width(150)))
+            {
+                stageEditor.AddCapsuleCollectable();
+            }
+            
+            GUILayout.Space(45);
+            
+            if (GUILayout.Button("Delete last collectable", GUILayout.Height(30), GUILayout.Width(150)))
+            {
+                stageEditor.DeleteLastCollectable();
+            }
+            
+            GUILayout.Space(30);
+            
+            GUILayout.Label("NOTE: You can save all your works using 'Save Level' button in 'LevelEditor' object.");
+            
         }
         
         private void DrawPlayMode()
