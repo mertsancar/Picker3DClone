@@ -1,23 +1,27 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using Game.Character;
 using Levels;
 using UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Managers
 {
     public class GameController : MonoBehaviour
     {
         public static GameController instance;
+        public LevelManager levelManager;
+        public StagePoolManager stagePoolManager;
 
         public Character character;
         public Level currentLevel;
         public Stage currentStage;
-
+        
         public int currentLevelIndex;
         public int currentStageIndex;
+
+        public bool isPlaying;
         
         private void Awake()
         {
@@ -25,62 +29,91 @@ namespace Managers
             Application.targetFrameRate = 600;
             
             SetGameEvents();
+            
+            SetLevel();
+            
         }
-
+        
         private void SetGameEvents()
         {
-            EventManager.instance.AddListener(EventNames.GameStart, GameStart);
-            EventManager.instance.AddListener(EventNames.StageEnd, StageEnd);
-            EventManager.instance.AddListener(EventNames.StageSuccess, StageSuccess);
-            EventManager.instance.AddListener(EventNames.StageFail, StageFail);
-            EventManager.instance.AddListener(EventNames.LevelSuccess, LevelSuccess);
+            EventManager.instance.AddListener(EventNames.GameStart, OnGameStart);
+            EventManager.instance.AddListener(EventNames.StageEnd, OnStageEnd);
+            EventManager.instance.AddListener(EventNames.StageSuccess, OnStageSuccess);
+            EventManager.instance.AddListener(EventNames.StageFail, OnStageFail);
+            EventManager.instance.AddListener(EventNames.LevelSuccess, OnLevelSuccess);
+        }
+        private void SetLevel()
+        {
+            stagePoolManager.Init();
+            levelManager.GenerateStartLevels(PersistenceManager.GetCurrentLevelIndex());
+            currentLevel = levelManager.currentLevelsInScene[0];
         }
         
         private void Start()
         {
+            isPlaying = true;
             EventManager.instance.TriggerEvent(EventNames.GameStart);
         }
         
-        private void GameStart()
+        private void OnGameStart()
         {
             currentStageIndex = 0;
+            EventManager.instance.TriggerEvent(EventNames.StartMovement);
+        }
+
+        private void Update()
+        {
+            OnGameContinue();
         }
         
-        private void StageEnd()
+        private void OnGameContinue()
         {
-            currentStage = currentLevel.stages.GetChild(currentStageIndex).GetComponent<Stage>();
             
-            if (currentStage.IsPoolFull)
+        }
+
+        private void OnStageEnd()
+        {
+            isPlaying = false;
+            
+            currentStage = currentLevel.stages.GetChild(currentStageIndex).GetComponent<Stage>();
+            if (currentStage.IsBasketFull)
             {
-                StageSuccess();
+                EventManager.instance.TriggerEvent(EventNames.StageSuccess);
             }
             else
             {
-                StageFail();
+                EventManager.instance.TriggerEvent(EventNames.StageFail);
             }
         }
 
-        private void StageSuccess()
+        private void OnStageSuccess()
         {
+            levelManager.completedStages.Add(currentStage);
+            
             var seq = DOTween.Sequence();
-
-            seq.AppendCallback(currentStage.Success);
+            seq.AppendCallback(currentStage.OnSuccess);
             seq.AppendCallback(() =>
             {
                 currentStageIndex++;
-                if (currentStageIndex > currentLevel.stages.childCount - 1) currentStageIndex = 0;
+                if (currentStageIndex > currentLevel.stages.childCount - 1)
+                {
+                    currentLevelIndex++;
+                    currentStageIndex = 0;
+                    currentLevel = levelManager.levels.GetChild(currentLevelIndex).GetComponent<Level>();
+                }
             });
             seq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageSuccessScreen), null));
             seq.AppendInterval(1f);
             seq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StartMovement));
+            seq.OnComplete(() => isPlaying = true);
         }
         
-        private void StageFail()
+        private void OnStageFail()
         {
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageFailScreen), null);
         }
         
-        private void LevelSuccess()
+        private void OnLevelSuccess()
         {
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(LevelSuccessScreen), null);
         }

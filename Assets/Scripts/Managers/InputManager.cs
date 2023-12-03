@@ -1,18 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
+using Game.Character;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+namespace Managers
 {
-    // Start is called before the first frame update
-    void Start()
+    public class InputManager : MonoBehaviour
     {
-        
-    }
+        private Character _character;
 
-    // Update is called once per frame
-    void Update()
-    {
+        private void Start()
+        {
+            _character = GameController.instance.character;
+        }
+
+        private void Update()
+        {
+            if (GameController.instance.isPlaying)
+            {
+                HandleGameplayInput();
+                UpdateGameplayLogic();
+            }
+        }
+
+        private void HandleGameplayInput()
+        {
+            HandleMouseInput();
+        }
+
+        private void HandleMouseInput()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                _character.lastMousePos = Input.mousePosition;
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                ResetMouseInput();
+            }
+
+            if (_character.lastMousePos != null)
+            {
+                UpdateMouseDirection();
+            }
+        }
+
+        private void ResetMouseInput()
+        {
+            _character.lastMousePos = null;
+            _character.direction = Vector3.zero;
+        }
         
+        private void UpdateMouseDirection()
+        {
+            _character.diff = (Vector2)Input.mousePosition - (Vector2)_character.lastMousePos;
+
+            _character.lastMousePos = Input.mousePosition;
+            _character.direction = Vector3.Lerp(_character.direction, Vector3.right * _character.diff.x, Time.deltaTime * 5);
+        }
+
+        private void UpdateGameplayLogic()
+        {
+            UpdateCharacterPosition();
+        }
+
+        private void UpdateCharacterPosition()
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(Mathf.Clamp(transform.position.x, -1.95f, 1.95f), transform.position.y, transform.position.z), Time.deltaTime * 15);
+        }
     }
 }

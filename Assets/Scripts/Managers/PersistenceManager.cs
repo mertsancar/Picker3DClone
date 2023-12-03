@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PersistenceManager : MonoBehaviour
+namespace Managers
 {
-    // Start is called before the first frame update
-    void Start()
+    public class PersistenceManager : MonoBehaviour
     {
+        public static int GetCurrentLevelIndex()
+        {
+            return PlayerPrefs.GetInt("CurrentLevelIndex", 0);
+        }
+        
+        public static void SetCurrentLevelIndex(int value)
+        {
+            PlayerPrefs.SetInt("CurrentLevelIndex", value);
+        }
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
+

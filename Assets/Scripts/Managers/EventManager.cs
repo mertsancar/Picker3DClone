@@ -198,9 +198,12 @@ public static class EventNames
     public static readonly string ScreenShown = "ScreenShown";
     public static readonly string GameStart = "GameStart";
     public static readonly string StartMovement = "StartMovement";
+    public static readonly string StopMovement = "StopMovement";
+    public static readonly string GameOver = "GameOver";
     public static readonly string StageEnd = "StageEnd";
     public static readonly string StageSuccess = "StageSuccess";
     public static readonly string StageFail = "StageFail";
     public static readonly string LevelSuccess = "LevelSuccess";
+    public static readonly string UpdateBasketCounter = "UpdateBasketCounter";
 
 }

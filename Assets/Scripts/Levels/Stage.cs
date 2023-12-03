@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Game.Collectables;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -9,56 +10,37 @@ namespace Levels
 {
     public class Stage : MonoBehaviour
     {
-        public Transform collectables;
-        public Transform missingWay;
-        public Transform door;
-        public TMP_Text poolItemCountText;
-        public bool IsPoolFull => poolCounter >= poolCapacity;
+        public const float stageLength = 24.97f; 
         
-        [SerializeField] private int poolCapacity;
-        private int poolCounter;
+        public StageBase stageBase;
+        public Collectables collectables;
+        public bool IsBasketFull => _basketCounter >= basketCapacity;
+        public int basketCapacity;
+        private int _basketCounter;
         
-
-        public void Success()
+        public void Init(StageData stageData)
         {
-            var seq = DOTween.Sequence();
-
-            seq.AppendCallback(GetMissingWay);
-            seq.AppendInterval(.75f);
-            seq.AppendCallback(OpenDoors);
-            seq.AppendInterval(.75f);
-            
-        }
-
-        private void UpdatePoolCounter()
-        {
-            poolCounter++;
-            poolItemCountText.text = poolCounter + "/" + poolCapacity;
-        } 
-            
-        private void GetMissingWay()
-        {
-            missingWay.gameObject.SetActive(true);
-            missingWay.DOMove(new Vector3(missingWay.position.x, 0, missingWay.position.z), .75f).SetEase(Ease.OutBounce);
+            basketCapacity = stageData.basketCapacity;
+            collectables.Init(stageData.collectables);
         }
         
-        private void OpenDoors()
+        private void Start()
         {
-            var leftDoor = door.GetChild(0);
-            var rightDoor = door.GetChild(1);
-
-            leftDoor.transform.DORotate(new Vector3(leftDoor.rotation.x, leftDoor.rotation.y, 75f), .75f);
-            rightDoor.transform.DORotate(new Vector3(leftDoor.rotation.x, leftDoor.rotation.y, -75f), .75f);
-
+            stageBase.basketCounterText.text = _basketCounter + "/" + basketCapacity;
+            EventManager.instance.AddListener(EventNames.UpdateBasketCounter, UpdateBasketCounter);
         }
-
-        private void OnTriggerEnter(Collider other)
+        
+        public void OnSuccess()
         {
-            if (other.CompareTag("Collectable"))
-            {
-                UpdatePoolCounter();
-            }
+            stageBase.OnSuccess();
         }
+        
+        private void UpdateBasketCounter()
+        {
+            _basketCounter++;
+            stageBase.basketCounterText.text = _basketCounter + "/" + basketCapacity;
+        }
+        
     }
     
 }

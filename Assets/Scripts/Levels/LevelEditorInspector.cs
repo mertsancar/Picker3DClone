@@ -29,12 +29,10 @@ namespace Levels
             
             GUILayout.Space(30f);
             
-            if (GUILayout.Button("Add Stage", GUILayout.Height(30), GUILayout.Width(100)))
+            if (GUILayout.Button("Create Level", GUILayout.Height(40), GUILayout.Width(100)))
             {
-                levelEditor.AddStage();
+                levelEditor.CreateLevel();
             }
-            
-            GUILayout.Space(30f);
             
             if (GUILayout.Button("Get Level", GUILayout.Height(40), GUILayout.Width(100)))
             {
@@ -44,6 +42,13 @@ namespace Levels
             if (GUILayout.Button("Save Level", GUILayout.Height(40), GUILayout.Width(100)))
             {
                 levelEditor.SaveLevel();
+            }
+            
+            GUILayout.Space(30f);
+            
+            if (GUILayout.Button("Add Stage", GUILayout.Height(30), GUILayout.Width(100)))
+            {
+                levelEditor.AddStage();
             }
             
             GUILayout.Space(60f);

@@ -36,7 +36,7 @@ namespace Levels
         private void AddCollectable(string prefabPath)
         {
             var collectablePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            var collectableObject = Instantiate(collectablePrefab, stage.collectables);
+            var collectableObject = Instantiate(collectablePrefab, stage.collectables.transform);
 
             Selection.objects = new Object[] { collectableObject };
         }
@@ -45,7 +45,7 @@ namespace Levels
         {
             Debug.Log("Last Collectable deleted!");
 
-            DestroyImmediate(stage.collectables.GetChild(stage.collectables.childCount - 1).gameObject);
+            DestroyImmediate(stage.collectables.transform.GetChild(stage.collectables.transform.childCount - 1).gameObject);
         }
         
         

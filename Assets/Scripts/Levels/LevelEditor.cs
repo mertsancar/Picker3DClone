@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Collectables;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -9,14 +10,21 @@ namespace Levels
     public class LevelEditor : MonoBehaviour
     {
         public Level level;
-        
+        public Transform levelPrefab;
         public int levelId;
+
+        public void CreateLevel()
+        {
+            Debug.Log("Default Level Created!");
+            var levelObject = Instantiate(levelPrefab, transform).GetComponent<Level>();
+            level = levelObject;
+        }
         
         public void AddStage()
         {
-            Debug.Log("Add Stage");
+            Debug.Log("Stage Added!");
 
-            var prefabPath = "Assets/Prefabs/Levels/Stage.prefab";
+            var prefabPath = "Assets/Prefabs/Levels/Stage/Stage.prefab";
             var stagePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             var stageObject = Instantiate(stagePrefab, level.stages).GetComponent<Stage>();
 
@@ -32,49 +40,74 @@ namespace Levels
         {
             Debug.Log("Get Level");
             
-            var prefabPath = "Assets/Resources/Levels/Prefabs/level" + levelId + ".prefab";
-            Level newLevel;
+            ClearLevel();
             
-            try
-            {
-                newLevel = PrefabUtility.LoadPrefabContents(prefabPath).GetComponent<Level>();
+            var dataPath = System.IO.File.ReadAllText(Application.dataPath + "/Resources/Levels/Level" + levelId + ".json");
+            LevelData data;
+            
+            try {
+                data = JsonUtility.FromJson<LevelData>(dataPath);
             }
-            catch (Exception e)
-            {
+            catch {
                 Debug.LogError("Error: The specified level " + levelId + " could not be found. The application has defaulted to the default level.");
-
-                ClearLevel();
-                
+                CreateLevel();
                 return;
             }
 
-            DestroyImmediate(level.gameObject);
-            Instantiate(newLevel, transform);
-
-            level = transform.GetChild(0).GetComponent<Level>();
+            levelId = data.levelId;
+            
+            var leveObject = Instantiate(levelPrefab, transform).GetComponent<Level>();
+            leveObject.InitForLevelEditor(data);
+            leveObject.name = "Level" + levelId;
+            
+            level = leveObject;
         }
         
         
         public void SaveLevel()
         {
             Debug.Log("Save Level");
-
-            level.levelId = levelId;
             
-            var prefabPath = "Assets/Resources/Levels/Prefabs/level" + levelId + ".prefab";
-            PrefabUtility.SaveAsPrefabAsset(level.gameObject, prefabPath);
+            var levelStages = new List<StageData>();
+            for (var i = 0; i < level.stages.childCount; i++)
+            {
+                var currentStage = level.stages.GetChild(i).GetComponent<Stage>();
+                
+                var collectables = new List<CollectableItemData>();
+                foreach (var collectable in currentStage.collectables.CollectableList)
+                {
+                    collectables.Add(new CollectableItemData
+                    {
+                        position = collectable.transform.localPosition,
+                        rotation =  collectable.transform.localRotation,
+                        scale = collectable.transform.localScale,
+                        type = collectable.type
+                    });
+                }
+                
+                levelStages.Add(new StageData
+                {
+                    basketCapacity = currentStage.basketCapacity,
+                    collectables = collectables
+                });
+            }
+
+            var levelData = new LevelData
+            {
+                levelId = levelId,
+                stages = levelStages
+            };
+            
+            var data = JsonUtility.ToJson(levelData);
+            System.IO.File.WriteAllText(Application.dataPath + "/Resources/Levels/Level" + levelData.levelId + ".json", data);
         }
         
         public void ClearLevel()
         {
-            Debug.Log("Save Level");
+            Debug.Log("Level clear!");
 
-            var prefabPath = "Assets/Prefabs/Levels/Level.prefab";
-            var defaultLevel = PrefabUtility.LoadPrefabContents(prefabPath).GetComponent<Level>();
-            DestroyImmediate(level.gameObject);
-            Instantiate(defaultLevel, transform);
-            
-            level = transform.GetChild(0).GetComponent<Level>();
+            if (level != null) DestroyImmediate(level.gameObject);
+
         }
 
 

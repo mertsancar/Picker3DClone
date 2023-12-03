@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Game.Collectables;
 using UnityEngine;
 
 namespace Levels
@@ -7,7 +8,7 @@ namespace Levels
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/LevelsData", order = 1)]
     public class LevelsData : ScriptableObject
     {
-        public List<LevelData> levelsData;
+        public List<LevelData> data;
     }
 
     [Serializable]
@@ -20,10 +21,17 @@ namespace Levels
     [Serializable]
     public struct StageData
     {
-        public Transform way;
-        public List<Transform> collectables;
-        public Transform pool;
-        public Transform door;
+        public int basketCapacity;
+        public List<CollectableItemData> collectables;
+    }
+    
+    [Serializable]
+    public struct CollectableItemData
+    {
+        public CollectableType type;
+        public Vector3 position;
+        public Quaternion rotation;
+        public Vector3 scale;
     }
 }
 
