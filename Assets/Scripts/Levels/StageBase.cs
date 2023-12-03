@@ -20,6 +20,18 @@ namespace Levels
             seq.AppendInterval(.75f);
             
         }
+
+        public void ResetStageBase()
+        {
+            missingWay.position = new Vector3(missingWay.transform.position.x, -1, missingWay.transform.position.z);
+            missingWay.gameObject.SetActive(false);
+            
+            var leftDoor = doors.GetChild(0);
+            var rightDoor = doors.GetChild(1);
+
+            leftDoor.transform.rotation = new Quaternion(0, 0, 0, 0);
+            rightDoor.transform.rotation = new Quaternion(0, 0, 0, 0);
+        }
         
         private void GetMissingWay()
         {

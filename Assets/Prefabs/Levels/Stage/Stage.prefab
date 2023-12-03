@@ -49,6 +49,7 @@ MonoBehaviour:
   stageBase: {fileID: 1641331923955330482}
   collectables: {fileID: 8075353842607429307}
   basketCapacity: 0
+  basketCounter: 0
 --- !u!114 &2270614375007593927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,6 +113,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6073097671126071264}
     m_Modifications:
+    - target: {fileID: 2223417443279724686, guid: 0a4d58f03319dac4081294a34d974406,
+        type: 3}
+      propertyPath: stage
+      value: 
+      objectReference: {fileID: 8496691290286040147}
     - target: {fileID: 5203033060417038670, guid: 0a4d58f03319dac4081294a34d974406,
         type: 3}
       propertyPath: m_Name

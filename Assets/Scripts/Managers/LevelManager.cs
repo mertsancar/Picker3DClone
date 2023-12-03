@@ -73,12 +73,15 @@ namespace Managers
 
         private void Update()
         {
-            if (completedStages.Count >= 2)
+            if (completedStages.Count >= 4)
             {
                 var completedStage = completedStages[0];
                 completedStages.Remove(completedStage);
                 GameController.instance.stagePoolManager.PushToPool(completedStage);
-                GenerateLevelByIndex(lastGeneratedLevelIndex + 1);
+                if (GameController.instance.stagePoolManager.poolSize >= 3)
+                {
+                    GenerateLevelByIndex(lastGeneratedLevelIndex + 1);
+                }
 
             }
         }

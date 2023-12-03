@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Game.Character;
+using Game.Collectables;
 using Levels;
 using UI;
 using UnityEngine;
@@ -11,8 +12,10 @@ namespace Managers
     public class GameController : MonoBehaviour
     {
         public static GameController instance;
+        
         public LevelManager levelManager;
         public StagePoolManager stagePoolManager;
+        public CollectablePoolManager collectablePoolManager;
 
         public Character character;
         public Level currentLevel;
@@ -45,6 +48,8 @@ namespace Managers
         private void SetLevel()
         {
             stagePoolManager.Init();
+            collectablePoolManager.Init();
+            
             levelManager.GenerateStartLevels(PersistenceManager.GetCurrentLevelIndex());
             currentLevel = levelManager.currentLevelsInScene[0];
         }
@@ -88,7 +93,7 @@ namespace Managers
 
         private void OnStageSuccess()
         {
-            levelManager.completedStages.Add(currentStage);
+            levelManager.completedStages.Add(currentStage); 
             
             var seq = DOTween.Sequence();
             seq.AppendCallback(currentStage.OnSuccess);

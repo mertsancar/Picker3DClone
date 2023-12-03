@@ -14,33 +14,38 @@ namespace Levels
         
         public StageBase stageBase;
         public Collectables collectables;
-        public bool IsBasketFull => _basketCounter >= basketCapacity;
+        public bool IsBasketFull => basketCounter >= basketCapacity;
         public int basketCapacity;
-        private int _basketCounter;
+        public int basketCounter;
         
         public void Init(StageData stageData)
         {
+            stageBase.ResetStageBase();
+            
+            basketCounter = 0;
             basketCapacity = stageData.basketCapacity;
             collectables.Init(stageData.collectables);
         }
         
         private void Start()
         {
-            stageBase.basketCounterText.text = _basketCounter + "/" + basketCapacity;
-            EventManager.instance.AddListener(EventNames.UpdateBasketCounter, UpdateBasketCounter);
+            basketCounter = 0;
+            stageBase.basketCounterText.text = basketCounter + "/" + basketCapacity;
         }
         
         public void OnSuccess()
         {
             stageBase.OnSuccess();
         }
-        
-        private void UpdateBasketCounter()
+
+        public void InitForEditor(StageData stageData)
         {
-            _basketCounter++;
-            stageBase.basketCounterText.text = _basketCounter + "/" + basketCapacity;
+            stageBase.ResetStageBase();
+            
+            basketCounter = 0;
+            basketCapacity = stageData.basketCapacity;
+            collectables.InitForEditor(stageData.collectables);
         }
-        
     }
     
 }

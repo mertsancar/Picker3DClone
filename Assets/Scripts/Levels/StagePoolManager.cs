@@ -7,7 +7,7 @@ namespace Levels
     public class StagePoolManager : MonoBehaviour
     {
         private List<Stage> _stagePool;
-        private int poolSize;
+        public int poolSize => _stagePool.Count;
         public int poolCapacity;
         public GameObject stageObjectPrefab;
 
@@ -24,7 +24,6 @@ namespace Levels
 
         public void PushToPool(Stage stage)
         {
-            poolSize++;
             _stagePool.Add(stage);
             stage.transform.SetParent(transform);
             stage.gameObject.SetActive(false);
@@ -32,7 +31,6 @@ namespace Levels
 
         public Stage PopFromPool()
         {
-            poolSize--;
             var stage = _stagePool.Last();
             _stagePool.Remove(stage);
             stage.gameObject.SetActive(true);

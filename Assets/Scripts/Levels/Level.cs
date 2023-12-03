@@ -35,8 +35,8 @@ namespace Levels
             {
                 var currentStageData = levelData.stages[i];
                 var stage = Instantiate(stageObject, stages).GetComponent<Stage>();
-                stage.Init(currentStageData);
                 stage.transform.position = new Vector3(0, 0, Stage.stageLength * i);
+                stage.InitForEditor(currentStageData);
             }
         }
 
