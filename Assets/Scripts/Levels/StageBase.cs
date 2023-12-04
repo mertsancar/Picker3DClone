@@ -9,16 +9,16 @@ namespace Levels
         public Transform doors;
         public Transform missingWay;
         public TMP_Text basketCounterText;
+        public BoxCollider stageEndPoint;
         
         public void OnSuccess()
         {
             var seq = DOTween.Sequence();
 
             seq.AppendCallback(GetMissingWay);
-            seq.AppendInterval(.75f);
+            seq.AppendInterval(1f);
             seq.AppendCallback(OpenDoors);
-            seq.AppendInterval(.75f);
-            
+            seq.AppendInterval(1f);
         }
 
         public void ResetStageBase()
@@ -31,6 +31,8 @@ namespace Levels
 
             leftDoor.transform.rotation = new Quaternion(0, 0, 0, 0);
             rightDoor.transform.rotation = new Quaternion(0, 0, 0, 0);
+
+            stageEndPoint.enabled = true;
         }
         
         private void GetMissingWay()
@@ -46,7 +48,6 @@ namespace Levels
 
             leftDoor.transform.DORotate(new Vector3(leftDoor.rotation.x, leftDoor.rotation.y, 75f), .75f);
             rightDoor.transform.DORotate(new Vector3(leftDoor.rotation.x, leftDoor.rotation.y, -75f), .75f);
-
         }
         
     }

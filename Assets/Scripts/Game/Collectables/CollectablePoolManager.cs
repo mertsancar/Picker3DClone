@@ -26,15 +26,16 @@ namespace Game.Collectables
                 
                 for (int j = 0; j < poolCapacity; j++)
                 {
-                    PushToPool(collectableType, CollectableFactory(collectableType));
+                    var collectable = CollectableFactory(collectableType);
+                    PushToPool(collectable);
                 }
             }
             
         }
         
-        public void PushToPool(CollectableType collectableType, BaseCollectable collectable)
+        public void PushToPool(BaseCollectable collectable)
         {
-            var pool = _collectablesPool[collectableType];
+            var pool = _collectablesPool[collectable.type];
             pool.Add(collectable);
             collectable.transform.SetParent(transform);
             collectable.gameObject.SetActive(false);
@@ -49,17 +50,16 @@ namespace Game.Collectables
             return collectable;
         }
         
-        
         private BaseCollectable CollectableFactory(CollectableType type)
         {
             switch (type)
             {
                 case CollectableType.Cube:
-                    return Instantiate(cubeObjectPrefab, transform).AddComponent<CubeCollectable>();
+                    return Instantiate(cubeObjectPrefab, transform).GetComponent<CubeCollectable>();
                 case CollectableType.Sphere:
-                    return Instantiate(sphereObjectPrefab, transform).AddComponent<SphereCollectable>();
+                    return Instantiate(sphereObjectPrefab, transform).GetComponent<SphereCollectable>();
                 case CollectableType.Capsule:
-                    return Instantiate(capsuleObjectPrefab, transform).AddComponent<CapsuleCollectable>();
+                    return Instantiate(capsuleObjectPrefab, transform).GetComponent<CapsuleCollectable>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

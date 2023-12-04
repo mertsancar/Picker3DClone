@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Game.Collectables;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -24,6 +25,8 @@ namespace Levels
             
             basketCounter = 0;
             basketCapacity = stageData.basketCapacity;
+            stageBase.basketCounterText.text = basketCounter + "/" + basketCapacity;
+            
             collectables.Init(stageData.collectables);
         }
         
@@ -35,6 +38,11 @@ namespace Levels
         
         public void OnSuccess()
         {
+            foreach (var collectable in collectables.CollectableList)
+            {
+                collectable.transform.DOScale(0, .25f).OnComplete(() =>
+                    GameController.instance.collectablePoolManager.PushToPool(collectable));
+            }
             stageBase.OnSuccess();
         }
 

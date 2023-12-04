@@ -793,6 +793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c4e2be8234d0e4dbba216dc8a4b277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stage: {fileID: 0}
 --- !u!1 &3450589645012695452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,6 +1116,7 @@ MonoBehaviour:
   doors: {fileID: 7136357762015491417}
   missingWay: {fileID: 7341633712276855344}
   basketCounterText: {fileID: 2632993008038602451}
+  stageEndPoint: {fileID: 1307469918776306234}
 --- !u!1 &5572106854464270424
 GameObject:
   m_ObjectHideFlags: 0

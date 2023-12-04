@@ -30,6 +30,7 @@ namespace Game.Collectables
             foreach (var collectableItemData in collectableItemsData)
             {
                 var go = GameController.instance.collectablePoolManager.PopFromPool(collectableItemData.type); //TODO-mertsancar: object pooling WIP
+                go.transform.SetParent(transform);
                 go.transform.localPosition = collectableItemData.position;
                 go.transform.localRotation = collectableItemData.rotation;
                 go.transform.localScale = collectableItemData.scale;
@@ -42,7 +43,8 @@ namespace Game.Collectables
             {
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    Destroy(transform.GetChild(i).gameObject);
+                    var collectable = transform.GetChild(i).GetComponent<BaseCollectable>();
+                    GameController.instance.collectablePoolManager.PushToPool(collectable);
                 }
             }
             

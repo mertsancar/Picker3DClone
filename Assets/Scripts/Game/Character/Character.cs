@@ -52,7 +52,7 @@ namespace Game.Character
             seq.AppendCallback(StopMovement);
             seq.AppendInterval(.1f);
             seq.AppendCallback(picker.PushCollectedItems);
-            seq.AppendInterval(1.25f);
+            seq.AppendInterval(2f);
             seq.OnComplete(() => EventManager.instance.TriggerEvent(EventNames.StageEnd));
             
         }

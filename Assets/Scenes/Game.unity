@@ -639,7 +639,7 @@ RectTransform:
   - {fileID: 987841291}
   - {fileID: 1874698233}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -737,7 +737,7 @@ GameObject:
   - component: {fileID: 1367566582}
   - component: {fileID: 1367566581}
   m_Layer: 0
-  m_Name: StagePoolManager
+  m_Name: StagePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -755,7 +755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd230a81068c884db374728fab5ce75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolCapacity: 20
+  poolCapacity: 10
   stageObjectPrefab: {fileID: 226526960464970499, guid: e4b73b1e394183442a41485b15f9d07e,
     type: 3}
 --- !u!4 &1367566582
@@ -765,12 +765,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367566580}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 1498559918}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498559917
 GameObject:
@@ -801,8 +801,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 441133177}
+  - {fileID: 1367566582}
+  - {fileID: 1765321732}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1498559919
 MonoBehaviour:
@@ -834,7 +836,7 @@ GameObject:
   - component: {fileID: 1765321732}
   - component: {fileID: 1765321731}
   m_Layer: 0
-  m_Name: CollectablePoolManager
+  m_Name: Collectable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -852,7 +854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2b42f6d11661b418fb380fdfd0ee20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolCapacity: 10
+  poolCapacity: 15
   cubeObjectPrefab: {fileID: 9084402800944887238, guid: 4871b7778babced4fa2caf267e04bd10,
     type: 3}
   sphereObjectPrefab: {fileID: 8737307069081241701, guid: 7f80f076ed110c24aa6b2e03d5318533,
@@ -866,12 +868,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1765321730}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 1498559918}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1812051817
 GameObject:
@@ -937,7 +939,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1874698232
 GameObject:
@@ -1018,7 +1020,7 @@ PrefabInstance:
     - target: {fileID: 2733712054391907487, guid: b616adf1351233e418b50e385033952e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2733712054391907487, guid: b616adf1351233e418b50e385033952e,
         type: 3}

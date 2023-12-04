@@ -45,6 +45,7 @@ namespace Managers
             EventManager.instance.AddListener(EventNames.StageFail, OnStageFail);
             EventManager.instance.AddListener(EventNames.LevelSuccess, OnLevelSuccess);
         }
+        
         private void SetLevel()
         {
             stagePoolManager.Init();

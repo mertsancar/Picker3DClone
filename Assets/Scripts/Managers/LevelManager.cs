@@ -19,7 +19,7 @@ namespace Managers
 
         public void GenerateStartLevels(int levelIndex)
         {
-            for (int i = levelIndex; i < levelIndex+5; i++)
+            for (int i = levelIndex; i < levelIndex+3; i++)
             {
                 GenerateLevelByIndex(levelIndex);
             }
