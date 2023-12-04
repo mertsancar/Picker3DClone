@@ -28,7 +28,7 @@ namespace Levels
             var stagePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             var stageObject = Instantiate(stagePrefab, level.stages).GetComponent<Stage>();
 
-            var zPosition = (level.stages.childCount-1) * 24.97f;
+            var zPosition = (level.GetStageCount()-1) * 24.97f;
 
             stageObject.transform.position = new Vector3(0, 0, zPosition);
             
@@ -69,9 +69,9 @@ namespace Levels
             Debug.Log("Save Level");
             
             var levelStages = new List<StageData>();
-            for (var i = 0; i < level.stages.childCount; i++)
+            for (var i = 0; i < level.GetStageCount(); i++)
             {
-                var currentStage = level.stages.GetChild(i).GetComponent<Stage>();
+                var currentStage = level.GetStageById(i);
                 
                 var collectables = new List<CollectableItemData>();
                 foreach (var collectable in currentStage.collectables.CollectableList)

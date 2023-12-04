@@ -11,8 +11,7 @@ namespace Levels
         {
             if (other.CompareTag("Collectable"))
             {
-                stage.basketCounter++;
-                stage.stageBase.basketCounterText.text = stage.basketCounter + "/" + stage.basketCapacity;
+                stage.UpdateBasketCounter();
             }
         }
         

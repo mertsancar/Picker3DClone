@@ -16,9 +16,9 @@ namespace Levels
             var seq = DOTween.Sequence();
 
             seq.AppendCallback(GetMissingWay);
-            seq.AppendInterval(1f);
+            seq.AppendInterval(.75f);
             seq.AppendCallback(OpenDoors);
-            seq.AppendInterval(1f);
+            seq.AppendInterval(.75f);
         }
 
         public void ResetStageBase()

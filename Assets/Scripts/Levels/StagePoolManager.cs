@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Managers;
 using UnityEngine;
 
 namespace Levels
@@ -8,14 +9,13 @@ namespace Levels
     {
         private List<Stage> _stagePool;
         public int poolSize => _stagePool.Count;
-        public int poolCapacity;
         public GameObject stageObjectPrefab;
 
         public void Init()
         {
             _stagePool = new List<Stage>();
 
-            for (int i = 0; i < poolCapacity; i++)
+            for (int i = 0; i < GameController.instance.levelManager.generateLevelCountOnStart * 3; i++)
             {
                 var go = Instantiate(stageObjectPrefab, transform).GetComponent<Stage>();
                 PushToPool(go);

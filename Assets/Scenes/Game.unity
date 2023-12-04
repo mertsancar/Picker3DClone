@@ -755,7 +755,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd230a81068c884db374728fab5ce75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolCapacity: 10
   stageObjectPrefab: {fileID: 226526960464970499, guid: e4b73b1e394183442a41485b15f9d07e,
     type: 3}
 --- !u!4 &1367566582
@@ -821,10 +820,7 @@ MonoBehaviour:
   levels: {fileID: 441133177}
   levelPrefab: {fileID: 6715390227975451753, guid: e26ec9ef263b3cd4d928dd0a2e220cf2,
     type: 3}
-  completedStages: []
-  currentLevelsInScene: []
-  lastGeneratedLevelIndex: 0
-  totalStageCountInScene: 0
+  generateLevelCountOnStart: 3
 --- !u!1 &1765321730
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,7 +832,7 @@ GameObject:
   - component: {fileID: 1765321732}
   - component: {fileID: 1765321731}
   m_Layer: 0
-  m_Name: Collectable
+  m_Name: CollectablePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -854,7 +850,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2b42f6d11661b418fb380fdfd0ee20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolCapacity: 15
   cubeObjectPrefab: {fileID: 9084402800944887238, guid: 4871b7778babced4fa2caf267e04bd10,
     type: 3}
   sphereObjectPrefab: {fileID: 8737307069081241701, guid: 7f80f076ed110c24aa6b2e03d5318533,

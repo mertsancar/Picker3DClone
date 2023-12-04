@@ -12,22 +12,28 @@ namespace Managers
     {
         public Transform levels;
         public Transform levelPrefab;
-        public List<Stage> completedStages;
-        public List<Level> currentLevelsInScene;
-        public int lastGeneratedLevelIndex;
-        public int totalStageCountInScene;
+        public int generateLevelCountOnStart;
+        private List<Stage> _completedStages;
+        private List<Level> _currentLevelsInScene;
+        private int _lastGeneratedLevelIndex;
+        private int _totalStageCountInScene;
+
+        private void Awake()
+        {
+
+        }
 
         public void GenerateStartLevels(int levelIndex)
         {
-            for (int i = levelIndex; i < levelIndex+3; i++)
+            for (int i = levelIndex; i < levelIndex+generateLevelCountOnStart; i++)
             {
                 GenerateLevelByIndex(levelIndex);
             }
-            lastGeneratedLevelIndex = levelIndex + 5;
+            _lastGeneratedLevelIndex = levelIndex + 5;
             
-            while (totalStageCountInScene < 9)
+            while (_totalStageCountInScene < 9)
             {
-                GenerateLevelByIndex(lastGeneratedLevelIndex+1);
+                GenerateLevelByIndex(_lastGeneratedLevelIndex+1);
             }
             
         }
@@ -44,8 +50,11 @@ namespace Managers
                 Debug.LogError("Error: The specified level " + levelId + " could not be found. The application has defaulted to the default level.");
                 return;
             }
+
+            if (_completedStages == null) _completedStages = new List<Stage>();
+            if (_currentLevelsInScene == null) _currentLevelsInScene = new List<Level>();
             
-            totalStageCountInScene += data.stages.Count;
+            _totalStageCountInScene += data.stages.Count;
 
             Vector3 levelPosition;
             if (levels.childCount == 0)
@@ -55,7 +64,7 @@ namespace Managers
             else
             {
                 var lastLevel = levels.GetChild(levels.childCount - 1).GetComponent<Level>();
-                var lastLevelStageCount = lastLevel.stages.childCount;
+                var lastLevelStageCount = lastLevel.GetStageCount();
                 var lastLevelLength = lastLevelStageCount * Stage.stageLength;
                 levelPosition = new Vector3(0, 0, lastLevel.transform.position.z + lastLevelLength);
             }
@@ -65,27 +74,35 @@ namespace Managers
             leveObject.transform.position = levelPosition;
             leveObject.name = "Level" + levelId;
             
-            currentLevelsInScene.Add(leveObject);
+            _currentLevelsInScene.Add(leveObject);
 
-            lastGeneratedLevelIndex = levelId;
+            _lastGeneratedLevelIndex = levelId;
             
         }
-
+        
+        public void AddCompletedStage(Stage completedStage) 
+        {
+            _completedStages.Add(completedStage);
+        }
+        
         private void Update()
         {
-            if (completedStages.Count >= 4)
+            if (_completedStages.Count >= 4)
             {
-                var completedStage = completedStages[0];
-                completedStages.Remove(completedStage);
+                var completedStage = _completedStages[0];
+                _completedStages.Remove(completedStage);
                 GameController.instance.stagePoolManager.PushToPool(completedStage);
                 if (GameController.instance.stagePoolManager.poolSize >= 3)
                 {
-                    GenerateLevelByIndex(lastGeneratedLevelIndex + 1);
+                    GenerateLevelByIndex(_lastGeneratedLevelIndex + 1);
                 }
-
             }
         }
         
+        public Level GetLevelById(int levelIndex) 
+        {
+            return levels.GetChild(levelIndex).GetComponent<Level>();
+        }
         
     }
     

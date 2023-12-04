@@ -50,9 +50,11 @@ namespace Managers
         {
             stagePoolManager.Init();
             collectablePoolManager.Init();
+
+            currentLevelIndex = PersistenceManager.GetCurrentLevelIndex();
             
-            levelManager.GenerateStartLevels(PersistenceManager.GetCurrentLevelIndex());
-            currentLevel = levelManager.currentLevelsInScene[0];
+            levelManager.GenerateStartLevels(currentLevelIndex);
+            currentLevel = levelManager.GetLevelById(currentLevelIndex);
         }
         
         private void Start()
@@ -80,38 +82,42 @@ namespace Managers
         private void OnStageEnd()
         {
             isPlaying = false;
+
+            var stageEndSeq = DOTween.Sequence();
             
-            currentStage = currentLevel.stages.GetChild(currentStageIndex).GetComponent<Stage>();
+            currentStage = currentLevel.GetStageById(currentStageIndex);
             if (currentStage.IsBasketFull)
             {
-                EventManager.instance.TriggerEvent(EventNames.StageSuccess);
+                stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StageSuccess));
+                stageEndSeq.AppendInterval(1f);
             }
             else
             {
                 EventManager.instance.TriggerEvent(EventNames.StageFail);
+                return;
             }
+
+            if (currentStageIndex > currentLevel.GetStageCount() - 1)
+            {
+                EventManager.instance.TriggerEvent(EventNames.LevelSuccess);
+                return;
+            }
+
+            stageEndSeq.AppendCallback(() =>
+            {
+                EventManager.instance.TriggerEvent(EventNames.StartMovement);
+                isPlaying = true;
+            });
+
         }
 
         private void OnStageSuccess()
         {
-            levelManager.completedStages.Add(currentStage); 
-            
-            var seq = DOTween.Sequence();
-            seq.AppendCallback(currentStage.OnSuccess);
-            seq.AppendCallback(() =>
-            {
-                currentStageIndex++;
-                if (currentStageIndex > currentLevel.stages.childCount - 1)
-                {
-                    currentLevelIndex++;
-                    currentStageIndex = 0;
-                    currentLevel = levelManager.levels.GetChild(currentLevelIndex).GetComponent<Level>();
-                }
-            });
-            seq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageSuccessScreen), null));
-            seq.AppendInterval(1f);
-            seq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StartMovement));
-            seq.OnComplete(() => isPlaying = true);
+            levelManager.AddCompletedStage(currentStage);
+            currentStage.OnSuccess();
+            currentStageIndex++;
+
+            EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageSuccessScreen), null);
         }
         
         private void OnStageFail()
@@ -121,6 +127,11 @@ namespace Managers
         
         private void OnLevelSuccess()
         {
+            currentLevelIndex++;
+            currentStageIndex = 0;
+            //PersistenceManager.SetCurrentLevelIndex(currentLevelIndex);
+            currentLevel = levelManager.GetLevelById(currentLevelIndex);
+            
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(LevelSuccessScreen), null);
         }
         
