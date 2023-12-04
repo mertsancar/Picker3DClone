@@ -55,6 +55,7 @@ namespace Managers
             
             levelManager.GenerateStartLevels(currentLevelIndex);
             currentLevel = levelManager.GetLevelById(currentLevelIndex);
+            currentStage = currentLevel.GetStageById(0);
         }
         
         private void Start()
@@ -65,7 +66,7 @@ namespace Managers
         
         private void OnGameStart()
         {
-            currentStageIndex = 0;
+            currentStageIndex = PersistenceManager.GetCurrentLevelIndex();
             EventManager.instance.TriggerEvent(EventNames.StartMovement);
         }
 
@@ -85,11 +86,20 @@ namespace Managers
 
             var stageEndSeq = DOTween.Sequence();
             
-            currentStage = currentLevel.GetStageById(currentStageIndex);
             if (currentStage.IsBasketFull)
             {
-                stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StageSuccess));
-                stageEndSeq.AppendInterval(1f);
+                if (currentStageIndex == currentLevel.GetStageCount() - 1)
+                {
+                    stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.LevelSuccess));
+                    stageEndSeq.AppendInterval(1f);
+                    // return;
+                }
+                else
+                {
+                    stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StageSuccess));
+                    stageEndSeq.AppendInterval(1f);
+                }
+                
             }
             else
             {
@@ -97,11 +107,6 @@ namespace Managers
                 return;
             }
 
-            if (currentStageIndex > currentLevel.GetStageCount() - 1)
-            {
-                EventManager.instance.TriggerEvent(EventNames.LevelSuccess);
-                return;
-            }
 
             stageEndSeq.AppendCallback(() =>
             {
@@ -113,9 +118,10 @@ namespace Managers
 
         private void OnStageSuccess()
         {
-            levelManager.AddCompletedStage(currentStage);
             currentStage.OnSuccess();
+            levelManager.AddCompletedStage(currentStage);
             currentStageIndex++;
+            currentStage = currentLevel.GetStageById(currentStageIndex);
 
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageSuccessScreen), null);
         }
@@ -127,10 +133,13 @@ namespace Managers
         
         private void OnLevelSuccess()
         {
-            currentLevelIndex++;
-            currentStageIndex = 0;
             //PersistenceManager.SetCurrentLevelIndex(currentLevelIndex);
+            currentStage.OnSuccess();
+            levelManager.AddCompletedStage(currentStage);
+            currentStageIndex = 0;
+            currentLevelIndex++;
             currentLevel = levelManager.GetLevelById(currentLevelIndex);
+            currentStage = currentLevel.GetStageById(currentStageIndex);
             
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(LevelSuccessScreen), null);
         }
