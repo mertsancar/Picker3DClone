@@ -10,18 +10,7 @@ namespace Game.Collectables
     public class Collectables : MonoBehaviour
     {
         private List<BaseCollectable> collectableList;
-        public List<BaseCollectable> CollectableList
-        {
-            get
-            {
-                AddCollectablesToList();
-                return collectableList;
-            }
-            set
-            {
-                collectableList = value;
-            }
-        }
+        public List<BaseCollectable> CollectableList => AddCollectablesToList();
 
         public void Init(List<CollectableItemData> collectableItemsData)
         {
@@ -51,15 +40,18 @@ namespace Game.Collectables
             collectableList = new List<BaseCollectable>();
         }
 
-        private void AddCollectablesToList()
+        private List<BaseCollectable> AddCollectablesToList()
         {
             collectableList = new List<BaseCollectable>();
             for (int i = 0; i < transform.childCount; i++)
             {
                 collectableList.Add(transform.GetChild(i).GetComponent<BaseCollectable>());
             }
+
+            return collectableList;
         }
-        
+
+#if UNITY_EDITOR
         public void InitForEditor(List<CollectableItemData> collectableItemsData)
         {
             ResetCollectables();
@@ -88,6 +80,7 @@ namespace Game.Collectables
                 go.transform.localScale = collectableItemData.scale;
             }
         }
+#endif
         
     }
     

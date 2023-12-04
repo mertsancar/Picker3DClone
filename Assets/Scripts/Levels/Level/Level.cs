@@ -35,6 +35,7 @@ namespace Levels
             return stages.childCount;
         }
         
+#if UNITY_EDITOR
         public void InitForLevelEditor(LevelData levelData)
         {
             levelId = levelData.levelId;
@@ -48,6 +49,7 @@ namespace Levels
                 stage.InitForEditor(currentStageData);
             }
         }
+#endif
 
     }
     

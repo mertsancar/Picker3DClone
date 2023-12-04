@@ -52,10 +52,11 @@ namespace Managers
             collectablePoolManager.Init();
 
             currentLevelIndex = PersistenceManager.GetCurrentLevelIndex();
+            currentStageIndex = 0;
             
             levelManager.GenerateStartLevels(currentLevelIndex);
             currentLevel = levelManager.GetLevelById(currentLevelIndex);
-            currentStage = currentLevel.GetStageById(0);
+            currentStage = currentLevel.GetStageById(currentStageIndex);
         }
         
         private void Start()
@@ -66,7 +67,6 @@ namespace Managers
         
         private void OnGameStart()
         {
-            currentStageIndex = PersistenceManager.GetCurrentLevelIndex();
             EventManager.instance.TriggerEvent(EventNames.StartMovement);
         }
 
@@ -91,14 +91,13 @@ namespace Managers
                 if (currentStageIndex == currentLevel.GetStageCount() - 1)
                 {
                     stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.LevelSuccess));
-                    stageEndSeq.AppendInterval(1f);
                     // return;
                 }
                 else
                 {
                     stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StageSuccess));
-                    stageEndSeq.AppendInterval(1f);
                 }
+                stageEndSeq.AppendInterval(1f);
                 
             }
             else

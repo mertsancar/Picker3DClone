@@ -15,32 +15,20 @@ namespace Managers
         public int generateLevelCountOnStart;
         private List<Stage> _completedStages;
         private List<Level> _currentLevelsInScene;
-        private int _lastGeneratedLevelIndex;
-        private int _totalStageCountInScene;
-
-        private void Awake()
-        {
-
-        }
+        private int maxLevelIndex = 2;
 
         public void GenerateStartLevels(int levelIndex)
         {
             for (int i = levelIndex; i < levelIndex+generateLevelCountOnStart; i++)
             {
-                GenerateLevelByIndex(levelIndex);
-            }
-            _lastGeneratedLevelIndex = levelIndex + 5;
-            
-            while (_totalStageCountInScene < 9)
-            {
-                GenerateLevelByIndex(_lastGeneratedLevelIndex+1);
+                GenerateLevelByIndex(i);
             }
             
         }
         
         private void GenerateLevelByIndex(int levelId)
         {
-            var dataPath = System.IO.File.ReadAllText(Application.dataPath + "/Resources/Levels/Level" + levelId%1 + ".json");
+            var dataPath = System.IO.File.ReadAllText(Application.dataPath + "/Resources/Levels/Level" + levelId%(maxLevelIndex+1) + ".json");
             LevelData data;
             
             try {
@@ -54,8 +42,6 @@ namespace Managers
             if (_completedStages == null) _completedStages = new List<Stage>();
             if (_currentLevelsInScene == null) _currentLevelsInScene = new List<Level>();
             
-            _totalStageCountInScene += data.stages.Count;
-
             Vector3 levelPosition;
             if (levels.childCount == 0)
             {
@@ -75,8 +61,6 @@ namespace Managers
             leveObject.name = "Level" + levelId;
             
             _currentLevelsInScene.Add(leveObject);
-
-            _lastGeneratedLevelIndex = levelId;
             
         }
         
@@ -94,7 +78,7 @@ namespace Managers
                 GameController.instance.stagePoolManager.PushToPool(completedStage);
                 if (GameController.instance.stagePoolManager.poolSize >= 3)
                 {
-                    GenerateLevelByIndex(_lastGeneratedLevelIndex + 1);
+                    GenerateLevelByIndex(levels.childCount);
                 }
             }
         }
