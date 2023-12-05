@@ -9,10 +9,10 @@ namespace Levels
         private int levelNumber;
         private int levelId;
 
-        public void Init(LevelData levelData)
+        public void Init(int levelNumber, LevelData levelData)
         {
             levelId = levelData.levelId;
-            levelNumber = levelData.levelNumber;
+            this.levelNumber = levelNumber;
             
             for (int i = 0; i < levelData.stages.Count; i++)
             {

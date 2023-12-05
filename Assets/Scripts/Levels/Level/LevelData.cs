@@ -8,7 +8,6 @@ namespace Levels
     [Serializable]
     public struct LevelData
     {
-        public int levelNumber;
         public int levelId;
         public List<StageData> stages;
     }

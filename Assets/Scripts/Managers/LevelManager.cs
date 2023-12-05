@@ -34,9 +34,7 @@ namespace Managers
                 Debug.LogError("Error: The specified level " + levelId + " could not be found. The application has defaulted to the default level.");
                 return;
             }
-
-            data.levelNumber = levelNumber;
-
+            
             if (_completedStages == null) _completedStages = new List<Stage>();
             if (_currentLevelsInScene == null) _currentLevelsInScene = new List<Level>();
             
@@ -54,7 +52,7 @@ namespace Managers
             }
 
             var leveObject = Instantiate(levelPrefab, levels).GetComponent<Level>();
-            leveObject.Init(data);
+            leveObject.Init(levelNumber, data);
             leveObject.transform.position = levelPosition;
             leveObject.name = "Level" + levelNumber;
             
@@ -75,7 +73,8 @@ namespace Managers
                 GameController.Instance.stagePoolManager.PushToPool(completedStage);
                 if (GameController.Instance.stagePoolManager.poolSize >= 3)
                 {
-                    GenerateLevelByNumber(levels.GetChild(levels.childCount-1).GetComponent<Level>().GetLevelNumber());
+                    var levelNumber = levels.GetChild(levels.childCount - 1).GetComponent<Level>().GetLevelNumber();
+                    GenerateLevelByNumber(levelNumber+1);
                     Destroy(levels.GetChild(0).gameObject);
                 }
             }
