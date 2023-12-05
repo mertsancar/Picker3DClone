@@ -5,12 +5,6 @@ using UnityEngine;
 
 namespace Levels
 {
-    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/LevelsData", order = 1)]
-    public class LevelsData : ScriptableObject
-    {
-        public List<LevelData> data;
-    }
-
     [Serializable]
     public struct LevelData
     {

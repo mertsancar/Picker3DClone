@@ -1,11 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Levels
 {
     public class StageEndBasket : MonoBehaviour
     {
-        public Stage stage;
+        [SerializeField] private Stage stage;
         
         private void OnTriggerEnter(Collider other)
         {

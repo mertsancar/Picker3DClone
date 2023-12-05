@@ -1,33 +1,19 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Managers;
+using UI.Screens;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ScreenManager : MonoBehaviour
 {
-    public static ScreenManager instance;
-    
     public GameObject[] screens;
 
     private void Awake()
     {
-        instance = this;
         EventManager.instance.AddListener(EventNames.ShowScreenRequested, ShowScreenRequested);
         EventManager.instance.AddListener(EventNames.HideScreenRequested, HideScreenRequested);
-    }
-
-    public bool IsAnyScreenOpen()
-    {
-        for (int i = 0; i < screens.Length; i++)
-        {
-            if (screens[i].activeInHierarchy)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private void HideScreenRequested(object eventParams, object param)
@@ -35,7 +21,7 @@ public class ScreenManager : MonoBehaviour
         HideScreen((Type)eventParams, param);
     }
 
-    private void HideScreen(Type t, object param, object analytics = null)
+    private void HideScreen(Type t, object param)
     {
         var screens = (BaseScreen[])Resources.FindObjectsOfTypeAll(t);
         foreach (var baseScreenController in screens)
@@ -49,7 +35,7 @@ public class ScreenManager : MonoBehaviour
         ShowScreen((Type)eventParams, param);
     }
     
-    public void ShowScreen(GameObject screen, object param)
+    private void ShowScreen(GameObject screen, object param)
     {
         screen.SetActive(true);
         var canvasGroup = screen.GetComponent<CanvasGroup>();
@@ -58,15 +44,8 @@ public class ScreenManager : MonoBehaviour
         screen.GetComponent<BaseScreen>().Prepare(param);
         EventManager.instance.TriggerEvent(EventNames.ScreenShown, GetType());
     }
-
-    private T ShowScreen<T>(object param) where T : BaseScreen
-    {
-        var screen = FindObjectOfType<T>();
-        ShowScreen(screen.gameObject, param);
-        return screen;
-    }
-
-    public Component ShowScreen(Type t, object param)
+    
+    private Component ShowScreen(Type t, object param)
     {
         var screens = (BaseScreen[])Resources.FindObjectsOfTypeAll(t);
         foreach (var baseScreenController in screens)
@@ -82,12 +61,12 @@ public class ScreenManager : MonoBehaviour
         return null;
     }
 
-    private void HideScreenComplete()
+    public void HideScreenComplete()
     {
         HideAllScreens();
     }
 
-    public void HideAllScreens()
+    private void HideAllScreens()
     {
         for (var i = 0; i < transform.childCount; i++)
         {
@@ -95,7 +74,7 @@ public class ScreenManager : MonoBehaviour
         }
     }
 
-    private void HideScreen(GameObject screen)
+    public void HideScreen(GameObject screen)
     {
         var canvasGroup = screen.GetComponent<CanvasGroup>();
         DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, 0.5f);

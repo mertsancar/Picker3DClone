@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using Levels;
-using UnityEditor;
-using UnityEngine;
 
 namespace Managers
 {
     public class LevelManager : MonoBehaviour
     {
-        public Transform levels;
-        public Transform levelPrefab;
+        [SerializeField] private Transform levels;
+        [SerializeField] private Transform levelPrefab;
         public int generateLevelCountOnStart;
         private List<Stage> _completedStages;
         private List<Level> _currentLevelsInScene;
-        private int _totalLevelCount = 3;
+        private readonly int _totalLevelCount = 4;
 
         public void GenerateStartLevels(int levelNumber)
         {
@@ -23,7 +19,6 @@ namespace Managers
             {
                 GenerateLevelByNumber(i);
             }
-            
         }
         
         private void GenerateLevelByNumber(int levelNumber)
@@ -64,7 +59,6 @@ namespace Managers
             leveObject.name = "Level" + levelNumber;
             
             _currentLevelsInScene.Add(leveObject);
-            
         }
         
         public void AddCompletedStage(Stage completedStage) 
@@ -78,10 +72,10 @@ namespace Managers
             {
                 var completedStage = _completedStages[0];
                 _completedStages.Remove(completedStage);
-                GameController.instance.stagePoolManager.PushToPool(completedStage);
-                if (GameController.instance.stagePoolManager.poolSize >= 3)
+                GameController.Instance.stagePoolManager.PushToPool(completedStage);
+                if (GameController.Instance.stagePoolManager.poolSize >= 3)
                 {
-                    GenerateLevelByNumber(levels.GetChild(levels.childCount-1).GetComponent<Level>().levelNumber+1);
+                    GenerateLevelByNumber(levels.GetChild(levels.childCount-1).GetComponent<Level>().GetLevelNumber());
                     Destroy(levels.GetChild(0).gameObject);
                 }
             }
@@ -92,7 +86,7 @@ namespace Managers
             for (int i = 0; i < levels.childCount; i++)
             {
                 var level = levels.GetChild(i).GetComponent<Level>();
-                if (level.levelNumber == levelNumber) return level;
+                if (level.GetLevelNumber() == levelNumber) return level;
             }
 
             return null;

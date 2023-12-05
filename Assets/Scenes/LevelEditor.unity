@@ -325,10 +325,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210bb2cfc47aa7d4a9394b1eb9cd2046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: {fileID: 0}
   levelPrefab: {fileID: 6715390227975451753, guid: e26ec9ef263b3cd4d928dd0a2e220cf2,
     type: 3}
-  levelId: 2
+  levelId: 3
 --- !u!4 &2986033917016540182
 Transform:
   m_ObjectHideFlags: 0

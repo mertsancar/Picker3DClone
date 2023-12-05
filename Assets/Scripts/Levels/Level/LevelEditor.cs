@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Game.Collectables;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -9,26 +7,44 @@ namespace Levels
 {
     public class LevelEditor : MonoBehaviour
     {
-        public Level level;
-        public Transform levelPrefab;
-        public int levelId;
+        [SerializeField] private Transform levelPrefab;
+        [SerializeField] private int levelId;
+        private Level _level;
+        private Transform _stages;
 
+        private void InitForLevelEditor(LevelData levelData)
+        {
+            levelId = levelData.levelId;
+
+            var stageObject = PrefabUtility.LoadPrefabContents("Assets/Prefabs/Levels/Stage/Stage.prefab");
+            for (int i = 0; i < levelData.stages.Count; i++)
+            {
+                var currentStageData = levelData.stages[i];
+                var stagEditor = Instantiate(stageObject, _stages).GetComponent<StageEditor>();
+                stagEditor.transform.position = new Vector3(0, 0, Stage.stageLength * i);
+                stagEditor.InitForEditor(currentStageData);
+            }
+        }
+        
         public void CreateLevel()
         {
-            Debug.Log("Default Level Created!");
+            Debug.Log("Default Level Created");
             var levelObject = Instantiate(levelPrefab, transform).GetComponent<Level>();
-            level = levelObject;
+            _level = levelObject;
+            _stages = levelObject.transform.GetChild(0);
+            
+            AddStage();
         }
         
         public void AddStage()
         {
-            Debug.Log("Stage Added!");
+            Debug.Log("Stage Added");
 
             var prefabPath = "Assets/Prefabs/Levels/Stage/Stage.prefab";
             var stagePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
-            var stageObject = Instantiate(stagePrefab, level.stages).GetComponent<Stage>();
+            var stageObject = Instantiate(stagePrefab, _level.transform.GetChild(0)).GetComponent<Stage>();
 
-            var zPosition = (level.GetStageCount()-1) * 24.97f;
+            var zPosition = (_level.GetStageCount()-1) * 24.97f;
 
             stageObject.transform.position = new Vector3(0, 0, zPosition);
             
@@ -56,25 +72,27 @@ namespace Levels
 
             levelId = data.levelId;
             
-            var leveObject = Instantiate(levelPrefab, transform).GetComponent<Level>();
-            leveObject.InitForLevelEditor(data);
-            leveObject.name = "Level" + levelId;
+            var levelObject = Instantiate(levelPrefab, transform).GetComponent<Level>();
+            levelObject.name = "Level" + levelId;
+            _level = levelObject;
+            _stages = levelObject.transform.GetChild(0);
+            InitForLevelEditor(data);
             
-            level = leveObject;
         }
         
         
         public void SaveLevel()
         {
-            Debug.Log("Save Level");
+            Debug.Log("Level saved");
             
             var levelStages = new List<StageData>();
-            for (var i = 0; i < level.GetStageCount(); i++)
+            for (var i = 0; i < _level.GetStageCount(); i++)
             {
-                var currentStage = level.GetStageByIndex(i);
+                var currentStagEditor = _level.GetStageByIndex(i).GetComponent<StageEditor>();
                 
                 var collectables = new List<CollectableItemData>();
-                foreach (var collectable in currentStage.collectables.CollectableList)
+                var x = currentStagEditor.GetCollectables();
+                foreach (var collectable in x)
                 {
                     collectables.Add(new CollectableItemData
                     {
@@ -87,7 +105,7 @@ namespace Levels
                 
                 levelStages.Add(new StageData
                 {
-                    basketCapacity = currentStage.basketCapacity,
+                    basketCapacity = currentStagEditor.basketCapacity,
                     collectables = collectables
                 });
             }
@@ -104,13 +122,11 @@ namespace Levels
         
         public void ClearLevel()
         {
-            Debug.Log("Level clear!");
+            Debug.Log("Level clear");
 
-            if (level != null) DestroyImmediate(level.gameObject);
+            if (_level != null) DestroyImmediate(_level.gameObject);
 
         }
-
-
     }
     
 }

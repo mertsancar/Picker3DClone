@@ -1,18 +1,15 @@
-using System;
-using System.Collections.Generic;
-using DG.Tweening;
+using UnityEngine;
 using Game.Character;
 using Game.Collectables;
 using Levels;
 using UI;
-using UnityEngine;
-using UnityEngine.Serialization;
+using DG.Tweening;
 
 namespace Managers
 {
     public class GameController : MonoBehaviour
     {
-        public static GameController instance;
+        public static GameController Instance;
         
         public LevelManager levelManager;
         public StagePoolManager stagePoolManager;
@@ -29,13 +26,12 @@ namespace Managers
         
         private void Awake()
         {
-            instance = this;
+            Instance = this;
             Application.targetFrameRate = 600;
             
             SetLevel();
             
             SetGameEvents();
-            
         }
         
         private void SetGameEvents()
@@ -45,6 +41,8 @@ namespace Managers
             EventManager.instance.AddListener(EventNames.StageSuccess, OnStageSuccess);
             EventManager.instance.AddListener(EventNames.StageFail, OnStageFail);
             EventManager.instance.AddListener(EventNames.LevelSuccess, OnLevelSuccess);
+            EventManager.instance.AddListener(EventNames.StartMovement, () => isPlaying = true);
+            EventManager.instance.AddListener(EventNames.StopMovement, () => isPlaying = false);
         }
         
         private void SetLevel()
@@ -62,7 +60,6 @@ namespace Managers
         
         private void Start()
         {
-            isPlaying = true;
             EventManager.instance.TriggerEvent(EventNames.GameStart);
         }
         
@@ -71,19 +68,9 @@ namespace Managers
             EventManager.instance.TriggerEvent(EventNames.StartMovement);
         }
 
-        private void Update()
-        {
-            OnGameContinue();
-        }
-        
-        private void OnGameContinue()
-        {
-            
-        }
-
         private void OnStageEnd()
         {
-            isPlaying = false;
+            EventManager.instance.TriggerEvent(EventNames.StopMovement);
 
             var stageEndSeq = DOTween.Sequence();
             
@@ -100,7 +87,6 @@ namespace Managers
                 stageEndSeq.AppendCallback(() =>
                 {
                     EventManager.instance.TriggerEvent(EventNames.StartMovement);
-                    isPlaying = true;
                 });
                 
             }

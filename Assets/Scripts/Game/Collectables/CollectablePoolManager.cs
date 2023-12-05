@@ -8,12 +8,10 @@ namespace Game.Collectables
 {
     public class CollectablePoolManager : MonoBehaviour
     {
+        [SerializeField] private GameObject cubeObjectPrefab;
+        [SerializeField] private GameObject sphereObjectPrefab;
+        [SerializeField] private GameObject capsuleObjectPrefab;
         private Dictionary<CollectableType, List<BaseCollectable>> _collectablesPool;
-        private int poolCapacity = 15;
-        public GameObject cubeObjectPrefab;
-        public GameObject sphereObjectPrefab;
-        public GameObject capsuleObjectPrefab;
-
 
         public void Init()
         {
@@ -24,14 +22,7 @@ namespace Game.Collectables
             foreach (var collectableType in collectableTypeList)
             {
                 _collectablesPool[collectableType] = new List<BaseCollectable>();
-                
-                for (int j = 0; j < poolCapacity; j++)
-                {
-                    var collectable = CollectableFactory(collectableType);
-                    PushToPool(collectable);
-                }
             }
-            
         }
         
         public void PushToPool(BaseCollectable collectable)

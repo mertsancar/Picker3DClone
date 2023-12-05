@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Game.Collectables;
 using UnityEngine;
 
 namespace Game.Character
 {
     public class Picker : MonoBehaviour
     {
-        public List<GameObject> collectedItems;
+        private List<GameObject> collectedItems = new List<GameObject>();
 
         public void PushCollectedItems()
         {

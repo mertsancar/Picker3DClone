@@ -6,15 +6,17 @@ namespace Managers
     public class InputManager : MonoBehaviour
     {
         private Character _character;
+        private Vector3? lastMousePos;
+        private Vector2 diff;
 
         private void Start()
         {
-            _character = GameController.instance.character;
+            _character = GameController.Instance.character;
         }
 
         private void Update()
         {
-            if (GameController.instance.isPlaying)
+            if (GameController.Instance.isPlaying)
             {
                 HandleGameplayInput();
             }
@@ -29,14 +31,14 @@ namespace Managers
         {
             if (Input.GetMouseButtonDown(0))
             {
-                _character.lastMousePos = Input.mousePosition;
+                lastMousePos = Input.mousePosition;
             }
             else if (Input.GetMouseButtonUp(0))
             {
                 ResetMouseInput();
             }
 
-            if (_character.lastMousePos != null)
+            if (lastMousePos != null)
             {
                 UpdateMouseDirection();
             }
@@ -44,16 +46,16 @@ namespace Managers
 
         private void ResetMouseInput()
         {
-            _character.lastMousePos = null;
+            lastMousePos = null;
             _character.direction = Vector3.zero;
         }
         
         private void UpdateMouseDirection()
         {
-            _character.diff = (Vector2)Input.mousePosition - (Vector2)_character.lastMousePos;
+            diff = (Vector2)Input.mousePosition - (Vector2)lastMousePos;
 
-            _character.lastMousePos = Input.mousePosition;
-            _character.direction = Vector3.Lerp(_character.direction,  Vector3.right * _character.diff.x, Time.deltaTime * 5);
+            lastMousePos = Input.mousePosition;
+            _character.direction = Vector3.Lerp(_character.direction,  Vector3.right * diff.x, Time.deltaTime * 5);
             _character.transform.position = new Vector3(Mathf.Clamp(_character.transform.position.x, -1.25f, 1.25f),
                 _character.transform.position.y, _character.transform.position.z);
 

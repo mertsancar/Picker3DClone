@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DG.Tweening;
-using Game.Collectables;
+﻿using DG.Tweening;
 using Managers;
 using UnityEngine;
 
@@ -9,19 +6,18 @@ namespace Game.Character
 {
     public class Character : MonoBehaviour
     {
+        [HideInInspector] public Vector3 direction; //TODO-mertsancar
         [SerializeField] private Rigidbody rb;
         [SerializeField] private Picker picker;
         
         [SerializeField] private float speed;
         [SerializeField] private float dragSpeed;
-        [HideInInspector] public Vector3 direction;
-        [HideInInspector] public Vector3? lastMousePos;
-        [HideInInspector] public Vector2 diff;
+
         private bool _isMoving;
         
         private void Awake()
         {
-            EventManager.instance.AddListener(EventNames.StartMovement, () => _isMoving = true);
+            EventManager.instance.AddListener(EventNames.StartMovement, StartMovement);
         }
         
         private void FixedUpdate()
@@ -38,6 +34,11 @@ namespace Game.Character
         private void ForwardMovement()
         {
             rb.velocity = Vector3.ClampMagnitude((direction * dragSpeed), 7) + (Vector3.forward * speed);
+        }
+        
+        private void StartMovement()
+        {
+            _isMoving = true;
         }
         
         private void StopMovement()

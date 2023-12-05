@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Levels
 {
     [CustomEditor(typeof(StageEditor))]
@@ -60,12 +61,10 @@ namespace Levels
         
         private void DrawPlayMode()
         {
-            if (GUILayout.Button("Generate Level in Play Mode", GUILayout.Height(30), GUILayout.Width(100)))
-            {
-                Debug.Log("Level generated!!");
-            }
+            GUILayout.Label("NOTE: You can NOT edit a stage in play mode");
         }
     }
     
 }
+#endif
 

@@ -158,7 +158,7 @@ MonoBehaviour:
   currentStage: {fileID: 0}
   currentLevelNumber: 0
   currentStageIndex: 0
-  isPlaying: 1
+  isPlaying: 0
 --- !u!4 &5154697
 Transform:
   m_ObjectHideFlags: 0
@@ -865,7 +865,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372505214}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.716604, y: 5.3361125, z: 18.219683}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3818,7 +3818,7 @@ PrefabInstance:
     - target: {fileID: 2733712054391907487, guid: b616adf1351233e418b50e385033952e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2733712054391907487, guid: b616adf1351233e418b50e385033952e,
         type: 3}

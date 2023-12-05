@@ -5,11 +5,7 @@ namespace Game.Collectables
     public abstract class BaseCollectable : MonoBehaviour
     {
         public CollectableType type;
-
-        public void Init()
-        {
-            
-        }
+        
         
     }
 

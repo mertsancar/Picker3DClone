@@ -1,48 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
+using Managers;
 using UnityEngine;
 
-[RequireComponent(typeof(CanvasGroup))]
-public class BaseScreen : MonoBehaviour
+namespace UI.Screens
 {
-    private EventManager eventManager;
-    private Tween currentTween;
-
-    public virtual void OnEnable()
+    [RequireComponent(typeof(CanvasGroup))]
+    public class BaseScreen : MonoBehaviour
     {
-        var canvasGroup = GetComponent<CanvasGroup>();
-        if (currentTween != null)
+        private Tween currentTween;
+
+        public virtual void OnEnable()
         {
-            currentTween.Kill();
+            var canvasGroup = GetComponent<CanvasGroup>();
+            if (currentTween != null)
+            {
+                currentTween.Kill();
+            }
+
+            canvasGroup.interactable = true;
+            currentTween = DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, 0.3f);
         }
 
-        canvasGroup.interactable = true;
-        currentTween = DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, 0.3f);
-    }
+        public virtual void Prepare(object param) {}
 
-    public virtual void Prepare(object param) {}
-
-    public virtual void OnClickCloseButton()
-    {
-        HideScreen();
-    }
-
-    public virtual void HideScreen()
-    {
-        var canvasGroup = GetComponent<CanvasGroup>();
-        if (currentTween != null)
+        public virtual void OnClickCloseButton()
         {
-            currentTween.Kill();
+            HideScreen();
         }
 
-        canvasGroup.interactable = false;
-        currentTween = DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 0, 0.3f).OnComplete(OnHideScreenComplete);
-    }
+        public virtual void HideScreen()
+        {
+            var canvasGroup = GetComponent<CanvasGroup>();
+            if (currentTween != null)
+            {
+                currentTween.Kill();
+            }
 
-    public virtual void OnHideScreenComplete()
-    {
-        gameObject.SetActive(false);
-        EventManager.instance.TriggerEvent(EventNames.ScreenClosed, GetType());
+            canvasGroup.interactable = false;
+            currentTween = DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 0, 0.3f).OnComplete(OnHideScreenComplete);
+        }
+
+        public virtual void OnHideScreenComplete()
+        {
+            gameObject.SetActive(false);
+            EventManager.instance.TriggerEvent(EventNames.ScreenClosed, GetType());
+        }
     }
+    
 }
+

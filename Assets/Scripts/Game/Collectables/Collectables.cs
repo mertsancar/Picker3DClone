@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Levels;
 using Managers;
 using UnityEditor;
@@ -9,8 +10,7 @@ namespace Game.Collectables
 {
     public class Collectables : MonoBehaviour
     {
-        private List<BaseCollectable> collectableList;
-        public List<BaseCollectable> CollectableList => AddCollectablesToList();
+        private List<BaseCollectable> collectableList = new List<BaseCollectable>();
 
         public void Init(List<CollectableItemData> collectableItemsData)
         {
@@ -18,14 +18,29 @@ namespace Game.Collectables
             
             foreach (var collectableItemData in collectableItemsData)
             {
-                var go = GameController.instance.collectablePoolManager.PopFromPool(collectableItemData.type); //TODO-mertsancar: object pooling WIP
-                go.transform.SetParent(transform);
-                go.transform.localPosition = collectableItemData.position;
-                go.transform.localRotation = collectableItemData.rotation;
-                go.transform.localScale = collectableItemData.scale;
+                var collectableObject = GameController.Instance.collectablePoolManager.PopFromPool(collectableItemData.type);
+                collectableList.Add(collectableObject);
+
+                var collectableTransform = collectableObject.transform;
+                collectableTransform.SetParent(transform);
+                collectableTransform.localPosition = collectableItemData.position;
+                collectableTransform.localRotation = collectableItemData.rotation;
+                collectableTransform.localScale = collectableItemData.scale;
             }
         }
-
+        
+        public void RemoveCollectables()
+        {
+            foreach (var collectable in collectableList)
+            {
+                collectable.transform.DOScale(0, .25f).OnComplete(() =>
+                {
+                    collectableList.Remove(collectable);
+                    GameController.Instance.collectablePoolManager.PushToPool(collectable);
+                });
+            }
+        }
+        
         private void ResetCollectables()
         {
             if (transform.childCount != 0)
@@ -33,54 +48,12 @@ namespace Game.Collectables
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     var collectable = transform.GetChild(i).GetComponent<BaseCollectable>();
-                    GameController.instance.collectablePoolManager.PushToPool(collectable);
+                    GameController.Instance.collectablePoolManager.PushToPool(collectable);
                 }
             }
             
             collectableList = new List<BaseCollectable>();
         }
-
-        private List<BaseCollectable> AddCollectablesToList()
-        {
-            collectableList = new List<BaseCollectable>();
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                collectableList.Add(transform.GetChild(i).GetComponent<BaseCollectable>());
-            }
-
-            return collectableList;
-        }
-
-#if UNITY_EDITOR
-        public void InitForEditor(List<CollectableItemData> collectableItemsData)
-        {
-            ResetCollectables();
-            
-            foreach (var collectableItemData in collectableItemsData)
-            {
-                var collectablePrefabPath = "";
-                switch (collectableItemData.type)
-                {
-                    case CollectableType.Cube:
-                        collectablePrefabPath = "Assets/Prefabs/Collectables/Cube.prefab";
-                        break;
-                    case CollectableType.Sphere:
-                        collectablePrefabPath = "Assets/Prefabs/Collectables/Sphere.prefab";
-                        break;
-                    case CollectableType.Capsule:
-                        collectablePrefabPath = "Assets/Prefabs/Collectables/Capsule.prefab";
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-                var collectablePrefab = PrefabUtility.LoadPrefabContents(collectablePrefabPath);
-                var go = Instantiate(collectablePrefab, transform);
-                go.transform.localPosition = collectableItemData.position;
-                go.transform.localRotation = collectableItemData.rotation;
-                go.transform.localScale = collectableItemData.scale;
-            }
-        }
-#endif
         
     }
     

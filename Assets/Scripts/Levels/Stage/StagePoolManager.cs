@@ -7,15 +7,15 @@ namespace Levels
 {
     public class StagePoolManager : MonoBehaviour
     {
-        private List<Stage> _stagePool;
+        [SerializeField] private GameObject stageObjectPrefab;
         public int poolSize => _stagePool.Count;
-        public GameObject stageObjectPrefab;
+        private List<Stage> _stagePool;
 
         public void Init()
         {
             _stagePool = new List<Stage>();
 
-            for (int i = 0; i < GameController.instance.levelManager.generateLevelCountOnStart * 3; i++)
+            for (int i = 0; i < GameController.Instance.levelManager.generateLevelCountOnStart * 3; i++)
             {
                 var go = Instantiate(stageObjectPrefab, transform).GetComponent<Stage>();
                 PushToPool(go);

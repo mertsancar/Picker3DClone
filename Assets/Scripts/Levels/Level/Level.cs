@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using Game.Collectables;
-using Managers;
-using UnityEditor;
+﻿using Managers;
 using UnityEngine;
 
 namespace Levels
 {
     public class Level : MonoBehaviour
     {
-        public int levelNumber;
+        [SerializeField] private Transform stages;
+        private int levelNumber;
         private int levelId;
-        public Transform stages;
 
         public void Init(LevelData levelData)
         {
@@ -20,13 +17,18 @@ namespace Levels
             for (int i = 0; i < levelData.stages.Count; i++)
             {
                 var currentStageData = levelData.stages[i];
-                var stage = GameController.instance.stagePoolManager.PopFromPool();
+                var stage = GameController.Instance.stagePoolManager.PopFromPool();
                 stage.transform.SetParent(stages);
                 stage.Init(currentStageData);
                 stage.transform.position = new Vector3(0, 0, Stage.stageLength * i);
             }
         }
 
+        public int GetLevelNumber()
+        {
+            return levelNumber;
+        }
+        
         public Stage GetStageByIndex(int currentStageIndex)
         {
             return stages.GetChild(currentStageIndex).GetComponent<Stage>();
@@ -36,22 +38,6 @@ namespace Levels
         {
             return stages.childCount;
         }
-        
-#if UNITY_EDITOR
-        public void InitForLevelEditor(LevelData levelData)
-        {
-            levelId = levelData.levelId;
-
-            var stageObject = PrefabUtility.LoadPrefabContents("Assets/Prefabs/Levels/Stage/Stage.prefab");
-            for (int i = 0; i < levelData.stages.Count; i++)
-            {
-                var currentStageData = levelData.stages[i];
-                var stage = Instantiate(stageObject, stages).GetComponent<Stage>();
-                stage.transform.position = new Vector3(0, 0, Stage.stageLength * i);
-                stage.InitForEditor(currentStageData);
-            }
-        }
-#endif
 
     }
     
