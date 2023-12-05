@@ -16,7 +16,7 @@ namespace Levels
         {
             levelId = levelData.levelId;
 
-            var stageObject = PrefabUtility.LoadPrefabContents("Assets/Prefabs/Levels/Stage/Stage.prefab");
+            var stageObject = PrefabUtility.LoadPrefabContents(LevelParser.StagePrefabPath);
             for (int i = 0; i < levelData.stages.Count; i++)
             {
                 var currentStageData = levelData.stages[i];
@@ -40,7 +40,7 @@ namespace Levels
         {
             Debug.Log("Stage Added");
 
-            var prefabPath = "Assets/Prefabs/Levels/Stage/Stage.prefab";
+            var prefabPath = LevelParser.StagePrefabPath;
             var stagePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             var stageObject = Instantiate(stagePrefab, _level.transform.GetChild(0)).GetComponent<Stage>();
 
@@ -58,15 +58,9 @@ namespace Levels
             
             ClearLevel();
             
-            var dataPath = System.IO.File.ReadAllText(Application.dataPath + "/Resources/Levels/Level" + levelId + ".json");
-            LevelData data;
-            
-            try {
-                data = JsonUtility.FromJson<LevelData>(dataPath);
-            }
-            catch {
-                Debug.LogError("Error: The specified level " + levelId + " could not be found. The application has defaulted to the default level.");
-                CreateLevel();
+            var data = LevelParser.GetLevelDataById(levelId);
+            if (data.levelId == -1)
+            {
                 return;
             }
 
@@ -116,8 +110,7 @@ namespace Levels
                 stages = levelStages
             };
             
-            var data = JsonUtility.ToJson(levelData);
-            System.IO.File.WriteAllText(Application.dataPath + "/Resources/Levels/Level" + levelData.levelId + ".json", data);
+            LevelParser.SetLevelDataById(levelData);
         }
         
         public void ClearLevel()

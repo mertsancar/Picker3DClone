@@ -9,7 +9,8 @@ namespace UI
     {
         public void OnClickAgainButton()
         {
-            SceneManager.LoadScene("Game");
+            EventManager.instance.TriggerEvent(EventNames.LevelAgain);
+            HideScreen();
         }
     }
     

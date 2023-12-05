@@ -21,19 +21,32 @@ namespace Managers
             }
         }
         
+        public Level GetLevelByNumber(int levelNumber) 
+        {
+            for (int i = 0; i < levels.childCount; i++)
+            {
+                var level = levels.GetChild(i).GetComponent<Level>();
+                if (level.GetLevelNumber() == levelNumber) return level;
+            }
+
+            return null;
+        }
+        
+        public int GetLevelIdByNumber(int levelNumber) 
+        {
+            return levelNumber <= _totalLevelCount ? levelNumber-1 : (levelNumber-1) % _totalLevelCount;
+        }
+        
+        public void AddCompletedStage(Stage completedStage) 
+        {
+            _completedStages.Add(completedStage);
+        }
+        
         private void GenerateLevelByNumber(int levelNumber)
         {
-            var levelId = levelNumber <= _totalLevelCount ? levelNumber-1 : (levelNumber-1) % _totalLevelCount;
-            var dataPath = System.IO.File.ReadAllText(Application.dataPath + "/Resources/Levels/Level" + levelId + ".json");
-            LevelData data;
+            var levelId = GetLevelIdByNumber(levelNumber);
             
-            try {
-                data = JsonUtility.FromJson<LevelData>(dataPath);
-            }
-            catch {
-                Debug.LogError("Error: The specified level " + levelId + " could not be found. The application has defaulted to the default level.");
-                return;
-            }
+            var data = LevelParser.GetLevelDataById(levelId);
             
             if (_completedStages == null) _completedStages = new List<Stage>();
             if (_currentLevelsInScene == null) _currentLevelsInScene = new List<Level>();
@@ -59,11 +72,6 @@ namespace Managers
             _currentLevelsInScene.Add(leveObject);
         }
         
-        public void AddCompletedStage(Stage completedStage) 
-        {
-            _completedStages.Add(completedStage);
-        }
-        
         private void Update()
         {
             if (_completedStages.Count >= 4)
@@ -78,17 +86,6 @@ namespace Managers
                     Destroy(levels.GetChild(0).gameObject);
                 }
             }
-        }
-        
-        public Level GetLevelByNumber(int levelNumber) 
-        {
-            for (int i = 0; i < levels.childCount; i++)
-            {
-                var level = levels.GetChild(i).GetComponent<Level>();
-                if (level.GetLevelNumber() == levelNumber) return level;
-            }
-
-            return null;
         }
         
     }

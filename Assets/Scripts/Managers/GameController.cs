@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 using Game.Character;
 using Game.Collectables;
 using Levels;
 using UI;
 using DG.Tweening;
+using UI.Screens;
 
 namespace Managers
 {
@@ -33,7 +35,12 @@ namespace Managers
             
             SetGameEvents();
         }
-        
+
+        private void Start()
+        {
+            EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(MenuScreen), null);
+        }
+
         private void SetGameEvents()
         {
             EventManager.instance.AddListener(EventNames.GameStart, OnGameStart);
@@ -41,6 +48,7 @@ namespace Managers
             EventManager.instance.AddListener(EventNames.StageSuccess, OnStageSuccess);
             EventManager.instance.AddListener(EventNames.StageFail, OnStageFail);
             EventManager.instance.AddListener(EventNames.LevelSuccess, OnLevelSuccess);
+            EventManager.instance.AddListener(EventNames.LevelAgain, OnLevelAgain);
             EventManager.instance.AddListener(EventNames.StartMovement, () => isPlaying = true);
             EventManager.instance.AddListener(EventNames.StopMovement, () => isPlaying = false);
         }
@@ -56,11 +64,6 @@ namespace Managers
             levelManager.GenerateStartLevels(currentLevelNumber);
             currentLevel = levelManager.GetLevelByNumber(currentLevelNumber);
             currentStage = currentLevel.GetStageByIndex(currentStageIndex);
-        }
-        
-        private void Start()
-        {
-            EventManager.instance.TriggerEvent(EventNames.GameStart);
         }
         
         private void OnGameStart()
@@ -94,7 +97,6 @@ namespace Managers
             {
                 EventManager.instance.TriggerEvent(EventNames.StageFail);
             }
-            
         }
 
         private void OnStageSuccess()
@@ -111,6 +113,13 @@ namespace Managers
         {
             currentStage.OnFail();
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageFailScreen), null);
+        }
+        
+        private void OnLevelAgain()
+        {
+            currentStage.Init(LevelParser.GetLevelDataById(levelManager.GetLevelIdByNumber(currentLevel.GetLevelNumber())).stages[currentStageIndex]);
+            character.transform.position = new Vector3(0, character.transform.position.y, currentStage.transform.position.z + 2.5f);
+            EventManager.instance.TriggerEvent(EventNames.StartMovement);
         }
         
         private void OnLevelSuccess()

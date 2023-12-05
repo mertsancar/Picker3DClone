@@ -24,6 +24,11 @@ namespace Levels
             }
         }
 
+        public int GetLevelId()
+        {
+            return levelNumber;
+        }
+        
         public int GetLevelNumber()
         {
             return levelNumber;

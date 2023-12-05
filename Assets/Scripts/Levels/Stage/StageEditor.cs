@@ -28,13 +28,13 @@ namespace Levels
                 switch (collectableItemData.type)
                 {
                     case CollectableType.Cube:
-                        collectablePrefabPath = "Assets/Prefabs/Collectables/Cube.prefab";
+                        collectablePrefabPath = LevelParser.CubePrefabPath;
                         break;
                     case CollectableType.Sphere:
-                        collectablePrefabPath = "Assets/Prefabs/Collectables/Sphere.prefab";
+                        collectablePrefabPath = LevelParser.SpherePrefabPath;
                         break;
                     case CollectableType.Capsule:
-                        collectablePrefabPath = "Assets/Prefabs/Collectables/Capsule.prefab";
+                        collectablePrefabPath = LevelParser.CapsulePrefabPath;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -63,7 +63,7 @@ namespace Levels
         {
             Debug.Log("Added Collectable!");
             
-            var prefabPath = "Assets/Prefabs/Collectables/Cube.prefab";
+            var prefabPath = LevelParser.CubePrefabPath;
             AddCollectable(prefabPath);
         }
         
@@ -71,7 +71,7 @@ namespace Levels
         {
             Debug.Log("Added Collectable!");
             
-            var prefabPath = "Assets/Prefabs/Collectables/Sphere.prefab";
+            var prefabPath = LevelParser.SpherePrefabPath;
             AddCollectable(prefabPath);
         }
         
@@ -79,7 +79,7 @@ namespace Levels
         {
             Debug.Log("Added Collectable!");
             
-            var prefabPath = "Assets/Prefabs/Collectables/Capsule.prefab";
+            var prefabPath = LevelParser.CapsulePrefabPath;
             AddCollectable(prefabPath);
         }
 
