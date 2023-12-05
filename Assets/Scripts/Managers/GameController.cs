@@ -6,6 +6,7 @@ using Game.Collectables;
 using Levels;
 using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Managers
 {
@@ -21,7 +22,7 @@ namespace Managers
         public Level currentLevel;
         public Stage currentStage;
         
-        public int currentLevelIndex;
+        public int currentLevelNumber;
         public int currentStageIndex;
 
         public bool isPlaying;
@@ -31,9 +32,9 @@ namespace Managers
             instance = this;
             Application.targetFrameRate = 600;
             
-            SetGameEvents();
-            
             SetLevel();
+            
+            SetGameEvents();
             
         }
         
@@ -51,12 +52,12 @@ namespace Managers
             stagePoolManager.Init();
             collectablePoolManager.Init();
 
-            currentLevelIndex = PersistenceManager.GetCurrentLevelIndex();
+            currentLevelNumber = PersistenceManager.GetCurrentLevelNumber();
             currentStageIndex = 0;
             
-            levelManager.GenerateStartLevels(currentLevelIndex);
-            currentLevel = levelManager.GetLevelById(currentLevelIndex);
-            currentStage = currentLevel.GetStageById(currentStageIndex);
+            levelManager.GenerateStartLevels(currentLevelNumber);
+            currentLevel = levelManager.GetLevelByNumber(currentLevelNumber);
+            currentStage = currentLevel.GetStageByIndex(currentStageIndex);
         }
         
         private void Start()
@@ -91,28 +92,23 @@ namespace Managers
                 if (currentStageIndex == currentLevel.GetStageCount() - 1)
                 {
                     stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.LevelSuccess));
-                    // return;
+                    return;
                 }
-                else
-                {
-                    stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StageSuccess));
-                }
+                
+                stageEndSeq.AppendCallback(() => EventManager.instance.TriggerEvent(EventNames.StageSuccess));
                 stageEndSeq.AppendInterval(1f);
+                stageEndSeq.AppendCallback(() =>
+                {
+                    EventManager.instance.TriggerEvent(EventNames.StartMovement);
+                    isPlaying = true;
+                });
                 
             }
             else
             {
                 EventManager.instance.TriggerEvent(EventNames.StageFail);
-                return;
             }
-
-
-            stageEndSeq.AppendCallback(() =>
-            {
-                EventManager.instance.TriggerEvent(EventNames.StartMovement);
-                isPlaying = true;
-            });
-
+            
         }
 
         private void OnStageSuccess()
@@ -120,26 +116,27 @@ namespace Managers
             currentStage.OnSuccess();
             levelManager.AddCompletedStage(currentStage);
             currentStageIndex++;
-            currentStage = currentLevel.GetStageById(currentStageIndex);
+            currentStage = currentLevel.GetStageByIndex(currentStageIndex);
 
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageSuccessScreen), null);
         }
         
         private void OnStageFail()
         {
+            currentStage.OnFail();
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageFailScreen), null);
         }
         
         private void OnLevelSuccess()
         {
-            //PersistenceManager.SetCurrentLevelIndex(currentLevelIndex);
             currentStage.OnSuccess();
             levelManager.AddCompletedStage(currentStage);
             currentStageIndex = 0;
-            currentLevelIndex++;
-            currentLevel = levelManager.GetLevelById(currentLevelIndex);
-            currentStage = currentLevel.GetStageById(currentStageIndex);
+            currentLevelNumber++;
+            currentLevel = levelManager.GetLevelByNumber(currentLevelNumber);
+            currentStage = currentLevel.GetStageByIndex(currentStageIndex);
             
+            PersistenceManager.SetCurrentLevelNumber(currentLevelNumber);
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(LevelSuccessScreen), null);
         }
         

@@ -24,16 +24,17 @@ namespace Levels
         
         public void Init(StageData stageData)
         {
-            ResetStageBase();
+            ResetStage();
             
             _basketCounter = 0;
             basketCapacity = stageData.basketCapacity;
             basketCounterText.text = _basketCounter + "/" + basketCapacity;
             
             collectables.Init(stageData.collectables);
+
         }
         
-        private void ResetStageBase()
+        private void ResetStage()
         {
             missingWay.position = new Vector3(missingWay.transform.position.x, -1, missingWay.transform.position.z);
             missingWay.gameObject.SetActive(false);
@@ -55,17 +56,27 @@ namespace Levels
         
         public void OnSuccess()
         {
-            foreach (var collectable in collectables.CollectableList)
-            {
-                collectable.transform.DOScale(0, .25f).OnComplete(() =>
-                    GameController.instance.collectablePoolManager.PushToPool(collectable));
-            }
+            RemoveCollectables();
             
             var seq = DOTween.Sequence();
             seq.AppendCallback(GetMissingWay);
             seq.AppendInterval(.75f);
             seq.AppendCallback(OpenDoors);
             seq.AppendInterval(.75f);
+        }
+        
+        public void OnFail()
+        {
+            RemoveCollectables();
+        }
+
+        private void RemoveCollectables()
+        {
+            foreach (var collectable in collectables.CollectableList)
+            {
+                collectable.transform.DOScale(0, .25f).OnComplete(() =>
+                    GameController.instance.collectablePoolManager.PushToPool(collectable));
+            }
         }
         
         private void GetMissingWay()
@@ -86,7 +97,7 @@ namespace Levels
 #if UNITY_EDITOR
         public void InitForEditor(StageData stageData)
         {
-            ResetStageBase();
+            ResetStage();
             
             _basketCounter = 0;
             basketCapacity = stageData.basketCapacity;

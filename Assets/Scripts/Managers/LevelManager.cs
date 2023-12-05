@@ -15,20 +15,21 @@ namespace Managers
         public int generateLevelCountOnStart;
         private List<Stage> _completedStages;
         private List<Level> _currentLevelsInScene;
-        private int maxLevelIndex = 2;
+        private int _totalLevelCount = 3;
 
-        public void GenerateStartLevels(int levelIndex)
+        public void GenerateStartLevels(int levelNumber)
         {
-            for (int i = levelIndex; i < levelIndex+generateLevelCountOnStart; i++)
+            for (int i = levelNumber; i < levelNumber+generateLevelCountOnStart; i++)
             {
-                GenerateLevelByIndex(i);
+                GenerateLevelByNumber(i);
             }
             
         }
         
-        private void GenerateLevelByIndex(int levelId)
+        private void GenerateLevelByNumber(int levelNumber)
         {
-            var dataPath = System.IO.File.ReadAllText(Application.dataPath + "/Resources/Levels/Level" + levelId%(maxLevelIndex+1) + ".json");
+            var levelId = levelNumber <= _totalLevelCount ? levelNumber-1 : (levelNumber-1) % _totalLevelCount;
+            var dataPath = System.IO.File.ReadAllText(Application.dataPath + "/Resources/Levels/Level" + levelId + ".json");
             LevelData data;
             
             try {
@@ -38,6 +39,8 @@ namespace Managers
                 Debug.LogError("Error: The specified level " + levelId + " could not be found. The application has defaulted to the default level.");
                 return;
             }
+
+            data.levelNumber = levelNumber;
 
             if (_completedStages == null) _completedStages = new List<Stage>();
             if (_currentLevelsInScene == null) _currentLevelsInScene = new List<Level>();
@@ -58,7 +61,7 @@ namespace Managers
             var leveObject = Instantiate(levelPrefab, levels).GetComponent<Level>();
             leveObject.Init(data);
             leveObject.transform.position = levelPosition;
-            leveObject.name = "Level" + levelId;
+            leveObject.name = "Level" + levelNumber;
             
             _currentLevelsInScene.Add(leveObject);
             
@@ -78,14 +81,21 @@ namespace Managers
                 GameController.instance.stagePoolManager.PushToPool(completedStage);
                 if (GameController.instance.stagePoolManager.poolSize >= 3)
                 {
-                    GenerateLevelByIndex(levels.childCount);
+                    GenerateLevelByNumber(levels.GetChild(levels.childCount-1).GetComponent<Level>().levelNumber+1);
+                    Destroy(levels.GetChild(0).gameObject);
                 }
             }
         }
         
-        public Level GetLevelById(int levelIndex) 
+        public Level GetLevelByNumber(int levelNumber) 
         {
-            return levels.GetChild(levelIndex).GetComponent<Level>();
+            for (int i = 0; i < levels.childCount; i++)
+            {
+                var level = levels.GetChild(i).GetComponent<Level>();
+                if (level.levelNumber == levelNumber) return level;
+            }
+
+            return null;
         }
         
     }

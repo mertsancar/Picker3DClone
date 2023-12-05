@@ -17,7 +17,6 @@ namespace Managers
             if (GameController.instance.isPlaying)
             {
                 HandleGameplayInput();
-                UpdateGameplayLogic();
             }
         }
 
@@ -54,17 +53,11 @@ namespace Managers
             _character.diff = (Vector2)Input.mousePosition - (Vector2)_character.lastMousePos;
 
             _character.lastMousePos = Input.mousePosition;
-            _character.direction = Vector3.Lerp(_character.direction, Vector3.right * _character.diff.x, Time.deltaTime * 5);
-        }
+            _character.direction = Vector3.Lerp(_character.direction,  Vector3.right * _character.diff.x, Time.deltaTime * 5);
+            _character.transform.position = new Vector3(Mathf.Clamp(_character.transform.position.x, -1.25f, 1.25f),
+                _character.transform.position.y, _character.transform.position.z);
 
-        private void UpdateGameplayLogic()
-        {
-            UpdateCharacterPosition();
         }
-
-        private void UpdateCharacterPosition()
-        {
-            transform.position = Vector3.Lerp(transform.position, new Vector3(Mathf.Clamp(transform.position.x, -1.95f, 1.95f), transform.position.y, transform.position.z), Time.deltaTime * 15);
-        }
+        
     }
 }

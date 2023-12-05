@@ -4,14 +4,14 @@ namespace Managers
 {
     public class PersistenceManager : MonoBehaviour
     {
-        public static int GetCurrentLevelIndex()
+        public static int GetCurrentLevelNumber()
         {
-            return PlayerPrefs.GetInt("CurrentLevelIndex", 0);
+            return PlayerPrefs.GetInt("CurrentLevelNumber", 1);
         }
         
-        public static void SetCurrentLevelIndex(int value)
+        public static void SetCurrentLevelNumber(int value)
         {
-            PlayerPrefs.SetInt("CurrentLevelIndex", value);
+            PlayerPrefs.SetInt("CurrentLevelNumber", value);
         }
         
     }

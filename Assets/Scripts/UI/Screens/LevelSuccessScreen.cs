@@ -1,18 +1,20 @@
 ﻿using Managers;
-using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
-    public class StageFailScreen : BaseScreen
+    public class LevelSuccessScreen : BaseScreen
     {
         public override void Prepare(object param)
         {
             base.Prepare(param);
         }
 
-        public void OnClickAgainButton()
+        public void OnClickNextButton()
         {
             HideScreen();
+            
+            EventManager.instance.TriggerEvent(EventNames.StartMovement);
             GameController.instance.isPlaying = true;
         }
     }

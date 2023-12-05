@@ -8,13 +8,15 @@ namespace Levels
 {
     public class Level : MonoBehaviour
     {
-        [HideInInspector] public int levelId;
+        public int levelNumber;
+        private int levelId;
         public Transform stages;
 
         public void Init(LevelData levelData)
         {
             levelId = levelData.levelId;
-
+            levelNumber = levelData.levelNumber;
+            
             for (int i = 0; i < levelData.stages.Count; i++)
             {
                 var currentStageData = levelData.stages[i];
@@ -25,7 +27,7 @@ namespace Levels
             }
         }
 
-        public Stage GetStageById(int currentStageIndex)
+        public Stage GetStageByIndex(int currentStageIndex)
         {
             return stages.GetChild(currentStageIndex).GetComponent<Stage>();
         }

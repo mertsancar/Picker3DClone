@@ -71,7 +71,7 @@ namespace Levels
             var levelStages = new List<StageData>();
             for (var i = 0; i < level.GetStageCount(); i++)
             {
-                var currentStage = level.GetStageById(i);
+                var currentStage = level.GetStageByIndex(i);
                 
                 var collectables = new List<CollectableItemData>();
                 foreach (var collectable in currentStage.collectables.CollectableList)
