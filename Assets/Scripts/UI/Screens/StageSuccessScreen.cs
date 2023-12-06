@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
-using UI.Screens;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace UI
+namespace UI.Screens
 {
     public class StageSuccessScreen : BaseScreen
     {

@@ -1,9 +1,6 @@
 ﻿using Managers;
-using UI.Screens;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace UI
+namespace UI.Screens
 {
     public class StageFailScreen : BaseScreen
     {
