@@ -11,6 +11,7 @@ namespace Game.Collectables
         [SerializeField] private GameObject cubeObjectPrefab;
         [SerializeField] private GameObject sphereObjectPrefab;
         [SerializeField] private GameObject capsuleObjectPrefab;
+        [SerializeField] private GameObject coneObjectPrefab;
         private Dictionary<CollectableType, List<BaseCollectable>> _collectablesPool;
 
         public void Init()
@@ -53,6 +54,8 @@ namespace Game.Collectables
                     return Instantiate(sphereObjectPrefab, transform).GetComponent<SphereCollectable>();
                 case CollectableType.Capsule:
                     return Instantiate(capsuleObjectPrefab, transform).GetComponent<CapsuleCollectable>();
+                case CollectableType.Cone:
+                    return Instantiate(coneObjectPrefab, transform).GetComponent<ConeCollectable>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

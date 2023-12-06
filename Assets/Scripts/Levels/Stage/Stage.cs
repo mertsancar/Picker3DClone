@@ -7,7 +7,7 @@ namespace Levels
 {
     public class Stage : MonoBehaviour
     {
-        public const float stageLength = 24.97f; 
+        public const float stageLength = 29.8f; 
         
         [SerializeField] private Transform doors;
         [SerializeField] private Transform missingWay;
@@ -34,6 +34,11 @@ namespace Levels
         {
             _basketCounter++;
             basketCounterText.text = _basketCounter + "/" + _basketCapacity;
+        }
+
+        public void ActivateCollectables()
+        {
+            collectables.ActivateCollectables();
         }
         
         public void OnSuccess()

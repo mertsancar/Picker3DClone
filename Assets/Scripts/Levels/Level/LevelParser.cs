@@ -8,6 +8,7 @@ namespace Levels
         public static readonly string CubePrefabPath = "Assets/Prefabs/Collectables/Cube.prefab";
         public static readonly string SpherePrefabPath = "Assets/Prefabs/Collectables/Sphere.prefab";
         public static readonly string CapsulePrefabPath = "Assets/Prefabs/Collectables/Capsule.prefab";
+        public static readonly string ConePrefabPath = "Assets/Prefabs/Collectables/Cone.prefab";
         
         public static LevelData GetLevelDataById(int levelId)
         {

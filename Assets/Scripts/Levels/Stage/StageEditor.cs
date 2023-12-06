@@ -36,6 +36,9 @@ namespace Levels
                     case CollectableType.Capsule:
                         collectablePrefabPath = LevelParser.CapsulePrefabPath;
                         break;
+                    case CollectableType.Cone:
+                        collectablePrefabPath = LevelParser.ConePrefabPath;
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -80,6 +83,14 @@ namespace Levels
             Debug.Log("Added Collectable!");
             
             var prefabPath = LevelParser.CapsulePrefabPath;
+            AddCollectable(prefabPath);
+        }
+        
+        public void AddConeCollectable()
+        {
+            Debug.Log("Added Collectable!");
+            
+            var prefabPath = LevelParser.ConePrefabPath;
             AddCollectable(prefabPath);
         }
 

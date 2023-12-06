@@ -11,7 +11,7 @@ namespace Managers
         public int generateLevelCountOnStart;
         private List<Stage> _completedStages;
         private List<Level> _currentLevelsInScene;
-        private readonly int _totalLevelCount = 4;
+        private readonly int _totalLevelCount = 8;
 
         public void GenerateStartLevels(int levelNumber)
         {

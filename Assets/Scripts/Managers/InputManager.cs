@@ -56,7 +56,7 @@ namespace Managers
 
             lastMousePos = Input.mousePosition;
             _character.direction = Vector3.Lerp(_character.direction,  Vector3.right * diff.x, Time.deltaTime * 5);
-            _character.transform.position = new Vector3(Mathf.Clamp(_character.transform.position.x, -1.45f, 1.45f),
+            _character.transform.position = new Vector3(Mathf.Clamp(_character.transform.position.x, -1.75f, 1.75f),
                 _character.transform.position.y, _character.transform.position.z);
 
         }

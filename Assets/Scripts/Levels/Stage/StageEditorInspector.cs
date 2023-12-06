@@ -46,6 +46,11 @@ namespace Levels
                 stageEditor.AddCapsuleCollectable();
             }
             
+            if (GUILayout.Button("Add Cone Collectable", GUILayout.Height(30), GUILayout.Width(150)))
+            {
+                stageEditor.AddConeCollectable();
+            }
+            
             GUILayout.Space(45);
             
             if (GUILayout.Button("Delete last collectable", GUILayout.Height(30), GUILayout.Width(150)))

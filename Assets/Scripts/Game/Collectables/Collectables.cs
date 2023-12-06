@@ -26,6 +26,16 @@ namespace Game.Collectables
                 collectableTransform.localPosition = collectableItemData.position;
                 collectableTransform.localRotation = collectableItemData.rotation;
                 collectableTransform.localScale = collectableItemData.scale;
+                
+                
+            }
+        }
+        
+        public void ActivateCollectables()
+        {
+            foreach (var collectable in collectableList)
+            {
+                collectable.GetComponent<Rigidbody>().isKinematic = false;
             }
         }
         
@@ -35,6 +45,7 @@ namespace Game.Collectables
             {
                 collectable.transform.DOScale(0, .25f).OnComplete(() =>
                 {
+                    collectable.GetComponent<Rigidbody>().isKinematic = true;
                     collectableList.Remove(collectable);
                     GameController.Instance.collectablePoolManager.PushToPool(collectable);
                 });

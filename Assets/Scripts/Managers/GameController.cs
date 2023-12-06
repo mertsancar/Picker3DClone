@@ -64,6 +64,7 @@ namespace Managers
             levelManager.GenerateStartLevels(currentLevelNumber);
             currentLevel = levelManager.GetLevelByNumber(currentLevelNumber);
             currentStage = currentLevel.GetStageByIndex(currentStageIndex);
+            currentStage.ActivateCollectables();
         }
         
         private void OnGameStart()
@@ -105,6 +106,7 @@ namespace Managers
             levelManager.AddCompletedStage(currentStage);
             currentStageIndex++;
             currentStage = currentLevel.GetStageByIndex(currentStageIndex);
+            currentStage.ActivateCollectables();
 
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(StageSuccessScreen), null);
         }
@@ -118,7 +120,8 @@ namespace Managers
         private void OnLevelAgain()
         {
             currentStage.Init(LevelParser.GetLevelDataById(levelManager.GetLevelIdByNumber(currentLevel.GetLevelNumber())).stages[currentStageIndex]);
-            character.transform.position = new Vector3(0, character.transform.position.y, currentStage.transform.position.z + 2.5f);
+            currentStage.ActivateCollectables();
+            character.transform.position = new Vector3(0, character.transform.position.y, currentStage.transform.position.z);
             EventManager.instance.TriggerEvent(EventNames.StartMovement);
         }
         
@@ -130,6 +133,7 @@ namespace Managers
             currentLevelNumber++;
             currentLevel = levelManager.GetLevelByNumber(currentLevelNumber);
             currentStage = currentLevel.GetStageByIndex(currentStageIndex);
+            currentStage.ActivateCollectables();
             
             PersistenceManager.SetCurrentLevelNumber(currentLevelNumber);
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(LevelSuccessScreen), null);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -39,12 +40,25 @@ namespace Levels
         public void AddStage()
         {
             Debug.Log("Stage Added");
-
+            
+            if (_level == null)
+            {
+                if (transform.childCount > 0)
+                {
+                    _level = transform.GetChild(0).GetComponent<Level>();
+                }
+                else
+                {
+                    CreateLevel();
+                    return;
+                }
+            }
+            
             var prefabPath = LevelParser.StagePrefabPath;
             var stagePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             var stageObject = Instantiate(stagePrefab, _level.transform.GetChild(0)).GetComponent<Stage>();
 
-            var zPosition = (_level.GetStageCount()-1) * 24.97f;
+            var zPosition = (_level.GetStageCount()-1) * Stage.stageLength;
 
             stageObject.transform.position = new Vector3(0, 0, zPosition);
             
@@ -77,6 +91,19 @@ namespace Levels
         
         public void SaveLevel()
         {
+            if (_level == null)
+            {
+                if (transform.childCount > 0)
+                {
+                    _level = transform.GetChild(0).GetComponent<Level>();
+                }
+                else
+                {
+                    Debug.Log("There is no level");
+                    return;
+                }
+            }
+            
             Debug.Log("Level saved");
             
             var levelStages = new List<StageData>();
@@ -116,9 +143,17 @@ namespace Levels
         public void ClearLevel()
         {
             Debug.Log("Level clear");
+            
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                DestroyImmediate(transform.GetChild(i).gameObject);
+            }
 
-            if (_level != null) DestroyImmediate(_level.gameObject);
+        }
 
+        private void OnDestroy()
+        {
+            ClearLevel();
         }
     }
     

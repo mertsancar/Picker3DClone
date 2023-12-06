@@ -13,7 +13,8 @@ namespace Game.Collectables
     {
         Cube,
         Sphere,
-        Capsule
+        Capsule,
+        Cone
     }
     
 }

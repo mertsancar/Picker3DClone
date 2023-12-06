@@ -11,7 +11,7 @@ namespace Game.Character
         {
             foreach (var t in collectedItems)
             {
-                t.GetComponent<Rigidbody>().AddForce(Vector3.forward * 350);
+                t.GetComponent<Rigidbody>().AddForce(Vector3.forward * 50);
             }
         }
         
