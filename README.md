@@ -1,3 +1,6 @@
 # Picker3DClone
  
-[![Demo](https://i.stack.imgur.com/Vp2cE.png)]([https://youtu.be/vt5fpE0bzSY](https://www.youtube.com/watch?v=-ZjQpRw7Ztk&ab_channel=MertSancar)https://www.youtube.com/watch?v=-ZjQpRw7Ztk&ab_channel=MertSancar)
+
+Video:
+https://github.com/mertsancar/Picker3DClone/assets/57791061/7db6f97e-533b-470a-a4f6-a95608f4f118
+
