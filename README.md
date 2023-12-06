@@ -8,16 +8,17 @@ https://github.com/mertsancar/Picker3DClone/assets/57791061/7db6f97e-533b-470a-a
 
 ## Level Editor:
 
+<pre>
 You can use "LevelEditor" object from "LevelEditor" scene. 
 
 ![image](https://github.com/mertsancar/Picker3DClone/assets/57791061/3181e4bb-b31c-4fc2-86d9-b6cace9d9744)
+</pre>
 
-
-
+<pre>
 After clicking the Create level button, you will see that a stage has been created on the screen. Each level consists of the combination of a certain number of stage objects. You can create and edit objects for the level via the Stage object.
 
 ![image](https://github.com/mertsancar/Picker3DClone/assets/57791061/5fcc062f-e755-4df1-882d-ea31a093c02a)
-
+</pre>
 
 <pre>
 To save your actions, you can click the "Save Level" button on the "LevelEditor" object.
