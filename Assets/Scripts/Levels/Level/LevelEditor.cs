@@ -30,6 +30,12 @@ namespace Levels
         public void CreateLevel()
         {
             Debug.Log("Default Level Created");
+            
+            if (_level != null || transform.childCount > 0)
+            {
+                ClearLevel();
+            }
+            
             var levelObject = Instantiate(levelPrefab, transform).GetComponent<Level>();
             _level = levelObject;
             _stages = levelObject.transform.GetChild(0);
@@ -105,6 +111,8 @@ namespace Levels
             }
             
             Debug.Log("Level saved");
+
+            _level.gameObject.name = "Level" + levelId;
             
             var levelStages = new List<StageData>();
             for (var i = 0; i < _level.GetStageCount(); i++)

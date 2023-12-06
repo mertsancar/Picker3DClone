@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Levels;
+using UnityEngine.SocialPlatforms;
 
 namespace Managers
 {
@@ -11,7 +12,7 @@ namespace Managers
         public int generateLevelCountOnStart;
         private List<Stage> _completedStages;
         private List<Level> _currentLevelsInScene;
-        private readonly int _totalLevelCount = 8;
+        private readonly int _totalLevelCount = 11;
 
         public void GenerateStartLevels(int levelNumber)
         {
@@ -34,7 +35,7 @@ namespace Managers
         
         public int GetLevelIdByNumber(int levelNumber) 
         {
-            return levelNumber <= _totalLevelCount ? levelNumber-1 : (levelNumber-1) % _totalLevelCount;
+            return levelNumber <= _totalLevelCount ? levelNumber-1 : Random.Range(0, _totalLevelCount); // for sorted order: (levelNumber-1) % _totalLevelCount 
         }
         
         public void AddCompletedStage(Stage completedStage) 
