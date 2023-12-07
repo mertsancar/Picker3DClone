@@ -327,7 +327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelPrefab: {fileID: 6715390227975451753, guid: e26ec9ef263b3cd4d928dd0a2e220cf2,
     type: 3}
-  levelId: 10
+  levelId: 9
 --- !u!4 &2986033917016540182
 Transform:
   m_ObjectHideFlags: 0

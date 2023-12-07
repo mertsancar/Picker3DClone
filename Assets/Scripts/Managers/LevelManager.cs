@@ -33,11 +33,6 @@ namespace Managers
             return null;
         }
         
-        public int GetLevelIdByNumber(int levelNumber) 
-        {
-            return levelNumber <= _totalLevelCount ? levelNumber-1 : Random.Range(0, _totalLevelCount); // for sorted order: (levelNumber-1) % _totalLevelCount 
-        }
-        
         public void AddCompletedStage(Stage completedStage) 
         {
             _completedStages.Add(completedStage);
@@ -73,9 +68,14 @@ namespace Managers
             _currentLevelsInScene.Add(leveObject);
         }
         
+        private int GetLevelIdByNumber(int levelNumber) 
+        {
+            return levelNumber <= _totalLevelCount ? levelNumber-1 : Random.Range(0, _totalLevelCount); // for sorted order: (levelNumber-1) % _totalLevelCount 
+        }
+        
         private void Update()
         {
-            if (_completedStages.Count >= 4)
+            if (_completedStages.Count >= 2)
             {
                 var completedStage = _completedStages[0];
                 _completedStages.Remove(completedStage);

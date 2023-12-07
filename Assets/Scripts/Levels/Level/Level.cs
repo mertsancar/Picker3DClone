@@ -6,17 +6,17 @@ namespace Levels
     public class Level : MonoBehaviour
     {
         [SerializeField] private Transform stages;
+        private LevelData data;
         private int levelNumber;
-        private int levelId;
 
         public void Init(int levelNumber, LevelData levelData)
         {
-            levelId = levelData.levelId;
+            data = levelData;
             this.levelNumber = levelNumber;
             
-            for (int i = 0; i < levelData.stages.Count; i++)
+            for (int i = 0; i < data.stages.Count; i++)
             {
-                var currentStageData = levelData.stages[i];
+                var currentStageData = data.stages[i];
                 var stage = GameController.Instance.stagePoolManager.PopFromPool();
                 stage.transform.SetParent(stages);
                 stage.Init(currentStageData);
@@ -24,9 +24,14 @@ namespace Levels
             }
         }
 
+        public LevelData GetLevelData()
+        {
+            return data;
+        }
+        
         public int GetLevelId()
         {
-            return levelNumber;
+            return data.levelId;
         }
         
         public int GetLevelNumber()
@@ -41,7 +46,7 @@ namespace Levels
 
         public int GetStageCount()
         {
-            return stages.childCount;
+            return data.stages.Count;
         }
 
     }

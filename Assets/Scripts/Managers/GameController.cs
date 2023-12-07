@@ -119,7 +119,7 @@ namespace Managers
         
         private void OnLevelAgain()
         {
-            currentStage.Init(LevelParser.GetLevelDataById(levelManager.GetLevelIdByNumber(currentLevel.GetLevelNumber())).stages[currentStageIndex]);
+            currentStage.Init(currentLevel.GetLevelData().stages[currentStageIndex]);
             currentStage.ActivateCollectables();
             character.transform.position = new Vector3(0, character.transform.position.y, currentStage.transform.position.z);
             EventManager.instance.TriggerEvent(EventNames.StartMovement);
