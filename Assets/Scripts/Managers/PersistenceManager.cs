@@ -14,6 +14,16 @@ namespace Managers
             PlayerPrefs.SetInt("CurrentLevelNumber", value);
         }
         
+        public static int GetCurrentLevelId()
+        {
+            return PlayerPrefs.GetInt("CurrentLevelId", 0);
+        }
+        
+        public static void SetCurrentLevelId(int value)
+        {
+            PlayerPrefs.SetInt("CurrentLevelId", value);
+        }
+        
     }
     
 }

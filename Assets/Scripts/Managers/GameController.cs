@@ -22,6 +22,7 @@ namespace Managers
         public Stage currentStage;
         
         public int currentLevelNumber;
+        public int currentLevelId;
         public int currentStageIndex;
 
         public bool isPlaying;
@@ -59,6 +60,7 @@ namespace Managers
             collectablePoolManager.Init();
 
             currentLevelNumber = PersistenceManager.GetCurrentLevelNumber();
+            currentLevelId = PersistenceManager.GetCurrentLevelId();
             currentStageIndex = 0;
             
             levelManager.GenerateStartLevels(currentLevelNumber);
@@ -132,10 +134,12 @@ namespace Managers
             currentStageIndex = 0;
             currentLevelNumber++;
             currentLevel = levelManager.GetLevelByNumber(currentLevelNumber);
+            currentLevelId = currentLevel.GetLevelId();
             currentStage = currentLevel.GetStageByIndex(currentStageIndex);
             currentStage.ActivateCollectables();
             
             PersistenceManager.SetCurrentLevelNumber(currentLevelNumber);
+            PersistenceManager.SetCurrentLevelId(currentLevelId);
             EventManager.instance.TriggerEvent(EventNames.ShowScreenRequested, typeof(LevelSuccessScreen), null);
         }
         
