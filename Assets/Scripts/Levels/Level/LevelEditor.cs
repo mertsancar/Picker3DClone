@@ -64,7 +64,7 @@ namespace Levels
             var stagePrefab = PrefabUtility.LoadPrefabContents(prefabPath);
             var stageObject = Instantiate(stagePrefab, _level.transform.GetChild(0)).GetComponent<Stage>();
 
-            var zPosition = (_level.GetStageCount()-1) * Stage.stageLength;
+            var zPosition = (_level.GetCurrentStageCount()-1) * Stage.stageLength;
 
             stageObject.transform.position = new Vector3(0, 0, zPosition);
             

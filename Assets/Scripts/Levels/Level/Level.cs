@@ -48,6 +48,11 @@ namespace Levels
         {
             return data.stages.Count;
         }
+        
+        public int GetCurrentStageCount()
+        {
+            return stages.childCount;
+        }
 
     }
     
